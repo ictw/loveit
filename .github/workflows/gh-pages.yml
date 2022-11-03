@@ -2,7 +2,7 @@ name: PUBLISH_TO_gh
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
