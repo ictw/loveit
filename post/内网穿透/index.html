@@ -1,0 +1,410 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>最全内网穿透工具 - AGou's Blog-2</title><meta name=Description content="关于博主"><meta property="og:title" content="最全内网穿透工具"><meta property="og:description" content="整理三款流行的内网穿透工具，frp【开源】，nps【开源】，ngrok【基础版免费】，前两款属于开源产品，需要自行搭建，ngrok属于付费产品，但是基础版，白嫖的足够用了.:smile:"><meta property="og:type" content="article"><meta property="og:url" content="https://ictw.github.io/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/"><meta property="og:image" content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta property="article:published_time" content="2021-10-21T09:01:46+08:00"><meta property="article:modified_time" content="2021-10-21T09:01:46+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta name=twitter:title content="最全内网穿透工具"><meta name=twitter:description content="整理三款流行的内网穿透工具，frp【开源】，nps【开源】，ngrok【基础版免费】，前两款属于开源产品，需要自行搭建，ngrok属于付费产品，但是基础版，白嫖的足够用了.:smile:"><meta name=application-name content="AGou's Blog-2."><meta name=apple-mobile-web-app-title content="AGou's Blog-2."><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/myBlog-2/favicon.png><link rel=icon type=image/png sizes=32x32 href=/myBlog-2/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/myBlog-2/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ictw.github.io/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/><link rel=prev href=https://ictw.github.io/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/><link rel=next href=https://ictw.github.io/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/loveit/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"最全内网穿透工具","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ictw.github.io\/loveit\/post\/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F\/"},"image":["https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"],"genre":"posts","keywords":"内网穿透","wordcount":4660,"url":"https:\/\/ictw.github.io\/loveit\/post\/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F\/","datePublished":"2021-10-21T09:01:46+08:00","dateModified":"2021-10-21T09:01:46+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"AGou-ops","logo":"https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"},"author":{"@type":"Person","name":"AGou-ops"},"description":""}</script></head><body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/myBlog-2/posts/>所有文章 </a><a class=menu-item href=/myBlog-2/tags/>标签 </a><a class=menu-item href=/myBlog-2/categories/>分类 </a><a class=menu-item href=/myBlog-2/anime/>Anime </a><a class=menu-item href=/myBlog-2/about/>关于 </a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value;"><option value=/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/myBlog-2/posts/>所有文章</a><a class=menu-item href=/myBlog-2/tags/>标签</a><a class=menu-item href=/myBlog-2/categories/>分类</a><a class=menu-item href=/myBlog-2/anime/>Anime</a><a class=menu-item href=/myBlog-2/about/>关于</a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value;"><option value=/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/ selected>简体中文</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">最全内网穿透工具</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/loveit/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>AGou-ops</a></span>&nbsp;<span class=post-category>收录于 <a href=/loveit/categories/linux/><i class="far fa-folder fa-fw"></i>Linux</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-10-21>2021-10-21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 4660 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 10 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#bore新起之秀>bore（新起之秀）</a></li><li><a href=#frp>frp</a></li><li><a href=#nps>nps</a></li><li><a href=#ngrok>ngrok</a></li><li><a href=#参考链接>参考链接</a></li></ul></nav></div></div><div class=content id=content><p>整理三款流行的内网穿透工具，<a href=https://github.com/fatedier/frp target=_blank rel="noopener noreffer">frp</a>【开源】，<a href=https://github.com/ehang-io/nps target=_blank rel="noopener noreffer">nps</a>【开源】，<a href=https://ngrok.com/ target=_blank rel="noopener noreffer">ngrok</a>【基础版免费】，前两款属于开源产品，需要自行搭建，<code>ngrok</code>属于付费产品，但是基础版，白嫖的足够用了.:smile:</p><h2 id=bore新起之秀>bore（新起之秀）</h2><p>github日趋势榜第一，github仓库地址<a href=https://github.com/ekzhang/bore target=_blank rel="noopener noreffer">https://github.com/ekzhang/bore</a></p><blockquote><p>A modern, simple TCP tunnel in Rust that exposes local ports to a remote server, bypassing standard NAT connection firewalls. <strong>That&rsquo;s all it does: no more, and no less.</strong></p></blockquote><p>用完之后，一个词来形容，<strong>so easy~</strong></p><p>快速安装：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 如果没有cargo，需要提前安装</span>
+<span class=c1># debian系</span>
+apt install cargo -y
+<span class=c1># MacOS</span>
+brew install cargo
+
+<span class=c1># 安装bore，依赖于rust</span>
+cargo install bore-cli
+
+<span class=c1># -- 此外，cargo还有docker镜像包，运行以下命令可以直接使用</span>
+docker run -it --init --rm --network host ekzhang/bore &lt;ARGS&gt;
+</code></pre></td></tr></table></div></div><blockquote><p>:warning: <strong>注意</strong>：如遇到cargo install过程中出现编译错误（原因是apt仓库中的rust版本太低，bore的最低要求是<a href=https://blog.rust-lang.org/2022/01/13/Rust-1.58.0.html#captured-identifiers-in-format-strings target=_blank rel="noopener noreffer">Rust 1.58.0</a>）：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh
+</code></pre></td></tr></table></div></div></blockquote><p>简单使用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 服务器端</span>
+bore server
+
+<span class=c1># 客户端（本地主机）</span>
+bore <span class=nb>local</span> <span class=m>8000</span> --to &lt;YOUR_REMOTE_SERVER_ADDR_OR_IP&gt;
+</code></pre></td></tr></table></div></div><p>添加认证：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># on the server</span>
+bore server --secret my_secret_string
+
+<span class=c1># on the client</span>
+bore <span class=nb>local</span> &lt;LOCAL_PORT&gt; --to &lt;TO&gt; --secret my_secret_string
+</code></pre></td></tr></table></div></div><p>效果如下：</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220413100822960.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220413100822960.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220413100822960.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220413100822960.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220413100822960.png title=image-20220413100822960></p><p>bore服务器端会随机起一个端口映射给客户端。</p><blockquote><p>:warning: <strong>注意</strong>：如果映射完之后发现无法访问，那应该是被你的防火墙拦截了，使用以下命令关闭防火墙：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 关闭防火墙</span>
+systemctl stop firewalld		<span class=c1># redhat系，禁止开机自启，systemctl disable掉就可以了，下面debian系也是.</span>
+systemctl stop ufw		<span class=c1># debian系</span>
+<span class=c1># 查看iptables规则</span>
+iptables -vnL
+<span class=c1># 清空iptables规则</span>
+iptables -F
+</code></pre></td></tr></table></div></div><p>如果不想关闭防火墙，那么就需要手动设置规则，这里不是本篇博文的重点，在此不再赘述.</p></blockquote><h2 id=frp>frp</h2><blockquote><p>A fast reverse proxy to help you expose a local server behind a NAT or firewall to the internet.</p><p>frp 是一个专注于内网穿透的高性能的反向代理应用，支持 TCP、UDP、HTTP、HTTPS 等多种协议。可以将内网服务以安全、便捷的方式通过具有公网 IP 节点的中转暴露到公网。</p></blockquote><p>frp架构图：</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021094816933.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021094816933.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021094816933.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021094816933.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021094816933.png title=image-20211021094816933></p><p>:warning:<code>frp</code>如果想外网访问，需要带有公网IP的服务器才可以，另外需要安全组放行相应的端口，要不然嗝屁没法正常访问，如果没有公网IP的服务器，建议使用下面要介绍的<a href=#ngrok rel>ngrok</a>。</p><p>废话少说，想要了解更多可以去GayHub仓库详细了解，下面开始快速安装步骤：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># frp官方release仓库：https://github.com/fatedier/frp/releases</span>
+<span class=c1># 服务端frps客户端frpc二进制包都在一起，所以下面的步骤基本一样</span>
+$ wget https://github.com/fatedier/frp/releases/download/v0.37.1/frp_0.37.1_linux_amd64.tar.gz
+$ tar xf frp_0.37.1_linux_amd64.tar.g <span class=o>&amp;&amp;</span> <span class=nb>cd</span> frp_0.37.1_linux_amd64
+</code></pre></td></tr></table></div></div><p>以下列举我常用的服务器端以及客户端配置【以后有增加会更新】：</p><ul><li>通过RDP访问内网Windows主机</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># --- server</span>
+<span class=c1># frps.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>bind_port</span> <span class=o>=</span> 7000			<span class=c1># 绑定的端口</span>
+<span class=nv>token</span> <span class=o>=</span> X56Fdsfx			<span class=c1># 用于身份验证，请自行修改，要保证服务端与客户端一致</span>
+<span class=nv>dashboard_port</span> <span class=o>=</span> 7500		<span class=c1># 面板</span>
+<span class=c1># dashboard 用户名密码，默认都为 admin</span>
+<span class=nv>dashboard_user</span> <span class=o>=</span> admin
+<span class=nv>dashboard_pwd</span> <span class=o>=</span> admin
+
+<span class=c1># --- client</span>
+<span class=c1># frpc.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>server_addr</span> <span class=o>=</span> x.x.x.x	<span class=c1>#  公网IP地址</span>
+<span class=nv>server_port</span> <span class=o>=</span> 7000		<span class=c1># 与服务器端的`bind_port`地址一致</span>
+<span class=nv>token</span> <span class=o>=</span> X56Fdsfx		<span class=c1># 用于身份验证，请自行修改，要保证服务端与客户端一致</span>
+
+<span class=o>[</span>rdp<span class=o>]</span>					<span class=c1># 这里面填的时连接名称，可以在dashboard中直观的分辨出你所穿透的服务</span>
+<span class=nb>type</span> <span class=o>=</span> tcp
+<span class=nv>local_ip</span> <span class=o>=</span> 127.0.0.1
+<span class=nv>local_port</span> <span class=o>=</span> <span class=m>3389</span>
+<span class=nv>remote_port</span> <span class=o>=</span> <span class=m>6000</span>
+</code></pre></td></tr></table></div></div><p>:v: 验证RDP远程访问内网Windows机器：随便找个<code>RDP</code>客户端工具，使用<code>&lt;PUBLIC_IP>:6000</code>连接即可。</p><p>:information_source:小技巧：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-powershell data-lang=powershell><span class=s1>&#39; 针对于Windows，为了方便使用，我们可以将frp添加为开机启动项，或者注册为服务。
+</span><span class=s1>
+</span><span class=s1># 添加为开机启动项
+</span><span class=s1>&#39;</span> <span class=n>文件名为</span><span class=err>：</span><span class=n>start_frpc</span><span class=p>.</span><span class=n>vbs</span><span class=err>，</span><span class=n>内容如下所示</span><span class=err>：</span>
+<span class=n>CreateObject</span><span class=p>(</span><span class=s2>&#34;WScript.Shell&#34;</span><span class=p>).</span><span class=n>Run</span> <span class=s2>&#34;&#34;&#34;D:\frp_windows_amd64\frpc.exe&#34;&#34;&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;-c&#34;</span> <span class=p>&amp;</span> <span class=s2>&#34;&#34;&#34;D:\frp_windows_amd64\frpc.ini&#34;&#34;&#34;</span><span class=p>,</span><span class=n>0</span>
+<span class=s1>&#39; 将该文件放到：C:\Users\&lt;USER_NAME&gt;\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup文件夹里面即可。
+</span><span class=s1>
+</span><span class=s1># 注册为服务
+</span><span class=s1>&#39;</span> <span class=n>下载一个nssm工具傻瓜式注册服务</span><span class=err>，</span><span class=n>然后将服务类型改为自启动即可</span><span class=err>，</span><span class=n>这个地方我就略过不详细讲了</span><span class=p>.</span>
+</code></pre></td></tr></table></div></div><ul><li>通过SSH访问内网机器（其实和RDP差不多，就不做解释了）</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># --- server</span>
+<span class=c1># frps.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>bind_port</span> <span class=o>=</span> <span class=m>7000</span>
+
+<span class=c1># --- client</span>
+<span class=c1># frpc.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>server_addr</span> <span class=o>=</span> x.x.x.x
+<span class=nv>server_port</span> <span class=o>=</span> <span class=m>7000</span>
+
+<span class=o>[</span>ssh<span class=o>]</span>
+<span class=nb>type</span> <span class=o>=</span> tcp
+<span class=nv>local_ip</span> <span class=o>=</span> 127.0.0.1
+<span class=nv>local_port</span> <span class=o>=</span> <span class=m>22</span>
+<span class=nv>remote_port</span> <span class=o>=</span> <span class=m>6000</span>
+</code></pre></td></tr></table></div></div><p>:v: 验证SSH访问内网机器：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ ssh -oPort<span class=o>=</span><span class=m>6000</span> &lt;USER_NAME&gt;@&lt;PUBLIC_IP&gt;			<span class=c1># 如ssh -oPort=6000 agou-ops@69.42.6.43</span>
+</code></pre></td></tr></table></div></div><p>frp 会将请求 <code>&lt;PUBLIC_IP>:6000</code> 的流量转发到内网机器的<code>22</code>端口。</p><p>:warning:使用上面的服务直接将SSH暴露于公网之中犹如裸奔，安全隐患极高，使用 <code>stcp(secret tcp)</code> 类型的代理可以避免让任何人都能访问到要穿透的服务，但是访问者也需要运行另外一个 frpc 客户端。其配置文件如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># --- server</span>
+<span class=c1># frps.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>bind_port</span> <span class=o>=</span> <span class=m>7000</span>
+
+<span class=c1># --- client</span>
+<span class=c1># frpc.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>server_addr</span> <span class=o>=</span> x.x.x.x
+<span class=nv>server_port</span> <span class=o>=</span> <span class=m>7000</span>
+
+<span class=o>[</span>secret_ssh<span class=o>]</span>
+<span class=nb>type</span> <span class=o>=</span> stcp
+<span class=c1># 只有 sk 一致的用户才能访问到此服务</span>
+<span class=nv>sk</span> <span class=o>=</span> abcdefg
+<span class=nv>local_ip</span> <span class=o>=</span> 127.0.0.1
+<span class=nv>local_port</span> <span class=o>=</span> <span class=m>22</span>
+
+<span class=c1># --- client，想要访问内网ssh的客户端也需要启动frpc</span>
+<span class=c1># frpc.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>server_addr</span> <span class=o>=</span> x.x.x.x
+<span class=nv>server_port</span> <span class=o>=</span> <span class=m>7000</span>
+
+<span class=o>[</span>secret_ssh_visitor<span class=o>]</span>
+<span class=nb>type</span> <span class=o>=</span> stcp
+<span class=c1># stcp 的访问者</span>
+<span class=nv>role</span> <span class=o>=</span> visitor
+<span class=c1># 要访问的 stcp 代理的名字</span>
+<span class=nv>server_name</span> <span class=o>=</span> secret_ssh
+<span class=nv>sk</span> <span class=o>=</span> abcdefg
+<span class=c1># 绑定本地端口用于访问 SSH 服务</span>
+<span class=nv>bind_addr</span> <span class=o>=</span> 127.0.0.1
+<span class=nv>bind_port</span> <span class=o>=</span> <span class=m>6000</span>
+</code></pre></td></tr></table></div></div><p>:v:验证：访问本地<code>6000</code>端口即可内网穿透到我们所需的另一台内网客户端机器.</p><p>使用以上类型<code>stcp</code>的流量会通过服务器，如果希望传输大量数据且流量不经过服务器，可以使用<a href=https://gofrp.org/docs/examples/xtcp/ target=_blank rel="noopener noreffer">点对点内网穿透xctp</a>，这里我就不过多介绍，感兴趣或者有需要的可以去了解了解。</p><ul><li>通过WEB访问内网网站服务</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># --- server</span>
+<span class=c1># frps.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>bind_port</span> <span class=o>=</span> <span class=m>7000</span>
+<span class=nv>vhost_http_port</span> <span class=o>=</span> <span class=m>8080</span>
+
+<span class=c1># --- client</span>
+<span class=c1># frpc.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>server_addr</span> <span class=o>=</span> x.x.x.x
+<span class=nv>server_port</span> <span class=o>=</span> <span class=m>7000</span>
+
+<span class=o>[</span>web<span class=o>]</span>
+<span class=nb>type</span> <span class=o>=</span> http
+<span class=nv>local_port</span> <span class=o>=</span> <span class=m>80</span>
+<span class=nv>custom_domains</span> <span class=o>=</span> agou-ops.cn
+
+<span class=o>[</span>web2<span class=o>]</span>
+<span class=nb>type</span> <span class=o>=</span> http
+<span class=nv>local_port</span> <span class=o>=</span> <span class=m>8080</span>
+<span class=nv>custom_domains</span> <span class=o>=</span> agou-ops.cn
+
+<span class=c1># 【可选】以下为将本地http服务转换为https服务并对外提供的插件配置</span>
+<span class=c1># -----------------------------</span>
+<span class=nv>plugin</span> <span class=o>=</span> https2http
+<span class=nv>plugin_local_addr</span> <span class=o>=</span> 127.0.0.1:80
+
+<span class=c1># HTTPS 证书相关的配置</span>
+<span class=nv>plugin_crt_path</span> <span class=o>=</span> ./server.crt
+<span class=nv>plugin_key_path</span> <span class=o>=</span> ./server.key
+<span class=nv>plugin_host_header_rewrite</span> <span class=o>=</span> 127.0.0.1
+plugin_header_X-From-Where <span class=o>=</span> frp
+<span class=c1># -----------------------------</span>
+</code></pre></td></tr></table></div></div><p>:v: 验证外网访问内网WEB：</p><blockquote><ol><li>将 <code>agou-ops.cn</code> 和 <code>agou-ops.cn</code> 的域名 A 记录解析到 IP <code>x.x.x.x</code>，如果服务器已经有对应的域名，也可以将 <code>CNAME</code> 记录解析到服务器原先的域名。或者可以通过修改 HTTP 请求的 Host 字段来实现同样的效果。</li><li>通过浏览器访问 <code>http://agou-ops.cn:8080</code> 即可访问到处于内网机器上 80 端口的服务，访问 <code>http://agou-ops.cn:8080</code> 则访问到内网机器上 8080 端口的服务。</li></ol></blockquote><ul><li>外网访问内网文件</li></ul><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># --- server</span>
+<span class=c1># frps.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>bind_port</span> <span class=o>=</span> <span class=m>7000</span>
+
+<span class=c1># --- client</span>
+<span class=c1># frpc.ini文件内容如下</span>
+<span class=o>[</span>common<span class=o>]</span>
+<span class=nv>server_addr</span> <span class=o>=</span> x.x.x.x
+<span class=nv>server_port</span> <span class=o>=</span> <span class=m>7000</span>
+
+<span class=o>[</span>test_static_file<span class=o>]</span>
+<span class=nb>type</span> <span class=o>=</span> tcp
+<span class=nv>remote_port</span> <span class=o>=</span> <span class=m>6000</span>
+<span class=nv>plugin</span> <span class=o>=</span> static_file
+<span class=c1># 要对外暴露的文件目录</span>
+<span class=nv>plugin_local_path</span> <span class=o>=</span> /tmp/file
+<span class=c1># 用户访问 URL 中会被去除的前缀，保留的内容即为要访问的文件路径</span>
+<span class=nv>plugin_strip_prefix</span> <span class=o>=</span> static
+<span class=nv>plugin_http_user</span> <span class=o>=</span> abc
+<span class=nv>plugin_http_passwd</span> <span class=o>=</span> abc
+</code></pre></td></tr></table></div></div><p>:v: 验证外网访问内网指定目录：通过浏览器访问 <a href=http://x.x.x.x>http://x.x.x.x</a>:6000/static/ 来查看位于<code>/tmp/file</code>目录下的文件，会要求输入已设置好的用户名和密码。</p><p><strong>编写完配置文件之后，先通过 <code>./frps -c ./frps.ini</code> 启动服务端，再通过 <code>./frpc -c ./frpc.ini</code> 启动客户端。如果需要在后台长期运行，建议结合其他工具使用，例如 <code>systemd</code> 和 <code>supervisor</code>。</strong></p><p>Done.</p><p>附：Dashboard样例图</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021110047098.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021110047098.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021110047098.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021110047098.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021110047098.png title=image-20211021110047098></p><p>该小节部分内容来源于官方文档，详情请查看<a href=#%e5%8f%82%e8%80%83%e9%93%be%e6%8e%a5 rel>参考链接</a>。</p><h2 id=nps>nps</h2><blockquote><p>nps是一款轻量级、高性能、功能强大的<strong>内网穿透</strong>代理服务器。目前支持<strong>tcp、udp流量转发</strong>，可支持任何<strong>tcp、udp</strong>上层协议（访问内网网站、本地支付接口调试、ssh访问、远程桌面，内网dns解析等等……），此外还<strong>支持内网http代理、内网socks5代理</strong>、<strong>p2p等</strong>，并带有功能强大的web管理端。</p></blockquote><p>同样，直接快速开始，不过多介绍：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># nps的客户端和服务端是分离开的，需要分别单独下载</span>
+
+<span class=c1># 服务端</span>
+$ wget https://github.com/ehang-io/nps/releases/download/v0.26.10/linux_amd64_server.tar.gz
+$ tar xf linux_amd64_server.tar.gz
+$ sudo mv nps /usr/local/bin		<span class=c1># 自己做软连接也可以</span>
+
+<span class=c1># 客户端</span>
+$ wget https://github.com/ehang-io/nps/releases/download/v0.26.10/linux_amd64_client.tar.gz
+$ tar xf linux_amd64_client.tar.gz
+$ sudo mv npc /usr/local/bin
+</code></pre></td></tr></table></div></div><p>安装与启动服务端与客户端的连接服务端：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 服务端</span>
+$ nps install			<span class=c1># 安装，该命令完成之后会在当前目录生成一个conf目录和一个web目录，文件用途显而易见</span>
+<span class=c1># 服务端配置文件需要修改的东西很少，按需进行调整即可，终端获取公网ip可以使用curl ifconfig.me或者curl ip.cip.cc等接口获取。</span>
+$ sed -i <span class=s1>&#39;s/web_host=.*/web_host=&lt;YOUR_PUBLIC_IP&gt;/&#39;</span> nps.conf
+$ nps start 			<span class=c1># 启动</span>
+
+<span class=c1># 客户端连接服务端</span>
+$ npc -server<span class=o>=</span>&lt;YOUR_PUBLIC_IP&gt;:8024 -vkey<span class=o>=</span>&lt;客户端的密钥&gt;		<span class=c1># 这个8024端口对应server端`nps.conf`中的bridge_port参数</span>
+</code></pre></td></tr></table></div></div><blockquote><p>停止和重启可用，stop和restart</p><p><strong>如果发现没有启动成功，可以使用<code>nps(.exe) stop</code>，然后运行<code>nps.(exe)</code>运行调试，或查看日志</strong>(Windows日志文件位于当前运行目录下，linux和darwin位于/var/log/nps.log)</p><ul><li>访问服务端ip:web服务端口（默认为8080）</li><li>使用用户名和密码登陆（默认admin/123，正式使用一定要更改）</li><li>创建客户端</li></ul></blockquote><p>客户端密钥可以从web页面中获取：</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021155239660.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021155239660.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021155239660.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021155239660.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021155239660.png title=image-20211021155239660></p><p>上图也是新建客户端的步骤（说是步骤，基本是没有，xd）。</p><p>新建完客户端之后就可以建立隧道连接了，这里以HTTP服务为例：</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021155808549.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021155808549.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021155808549.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021155808549.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021155808549.png title=image-20211021155808549></p><p>傻瓜式配置，我就不多说了，<code>客户端ID</code>即为你上面创建的那个，可以去<code>客户端</code>页面中进行查看。</p><p>:v:验证：访问公网的9090端口，即访问的是内网指定IP和端口的应用。</p><p>附：<code>nps.conf</code>配置文件名称及含义（来自官方文档）：</p><table><thead><tr><th>名称</th><th>含义</th></tr></thead><tbody><tr><td>web_port</td><td>web管理端口</td></tr><tr><td>web_password</td><td>web界面管理密码</td></tr><tr><td>web_username</td><td>web界面管理账号</td></tr><tr><td>web_base_url</td><td>web管理主路径,用于将web管理置于代理子路径后面</td></tr><tr><td>bridge_port</td><td>服务端客户端通信端口</td></tr><tr><td>https_proxy_port</td><td>域名代理https代理监听端口</td></tr><tr><td>http_proxy_port</td><td>域名代理http代理监听端口</td></tr><tr><td>auth_key</td><td>web api密钥</td></tr><tr><td>bridge_type</td><td>客户端与服务端连接方式kcp或tcp</td></tr><tr><td>public_vkey</td><td>客户端以配置文件模式启动时的密钥，设置为空表示关闭客户端配置文件连接模式</td></tr><tr><td>ip_limit</td><td>是否限制ip访问，true或false或忽略</td></tr><tr><td>flow_store_interval</td><td>服务端流量数据持久化间隔，单位分钟，忽略表示不持久化</td></tr><tr><td>log_level</td><td>日志输出级别</td></tr><tr><td>auth_crypt_key</td><td>获取服务端authKey时的aes加密密钥，16位</td></tr><tr><td>p2p_ip</td><td>服务端Ip，使用p2p模式必填</td></tr><tr><td>p2p_port</td><td>p2p模式开启的udp端口</td></tr><tr><td>pprof_ip</td><td>debug pprof 服务端ip</td></tr><tr><td>pprof_port</td><td>debug pprof 端口</td></tr><tr><td>disconnect_timeout</td><td>客户端连接超时，单位 5s，默认值 60，即 300s = 5mins</td></tr></tbody></table><h2 id=ngrok>ngrok</h2><p>首先注册一个<code>ngrok</code>账号，<a href=https://ngrok.com/ target=_blank rel="noopener noreffer">官网地址</a>，注册登录之后会跳转一个<a href=https://dashboard.ngrok.com/get-started/setup target=_blank rel="noopener noreffer">快速开始页面</a>，如下所示，安装对应操作系统及架构的二进制包即可使用：</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021092125885.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021092125885.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021092125885.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021092125885.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021092125885.png title=image-20211021092125885></p><p>官网讲的很详细，这里我就简单的把要使用的命令罗列出来，方便使用：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 这里以linux系统为例</span>
+$ wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+$ unzip ngrok-stable-linux-amd64.zip
+$ sudo mv ngrok /usr/local/bin
+<span class=c1># 验证ngrok是否成功安装</span>
+$ ngrok version
+ngrok version 2.3.40
+<span class=c1># 获取你的token，https://dashboard.ngrok.com/get-started/your-authtoken</span>
+$ ngrok authtoken &lt;YOUR_TOKEN_HERE&gt; 		<span class=c1># 该命令执行之后会在用户家目录生成一个token文件，路径为~/.ngrok2/ngrok.yml</span>
+</code></pre></td></tr></table></div></div><p>这里我随便起个web服务，以我的博客<code>hugo</code>为例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ <span class=nb>cd</span> myWeb/myBlog <span class=o>&amp;&amp;</span> hugo server			<span class=c1># hugo默认会监听在本地localhost:1313端口</span>
+<span class=c1># 启用一个http隧道来外网远程访问本地博客</span>
+$ ngrok http <span class=m>1313</span> 
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021093201714.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021093201714.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021093201714.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021093201714.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021093201714.png title=image-20211021093201714></p><p>可以看到<code>ngrok</code>服务已经正常运行，而且给出了远程访问的http地址和https地址，复制到浏览器即可外网远程访问本地web服务.</p><p>此外，<code>ngrok</code>还内置了一个web接口，即图上的<code>Web Interface</code>，默认地址是http://127.0.0.1:4040</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021093501423.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021093501423.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021093501423.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021093501423.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211021093501423.png title=image-20211021093501423></p><p>可以看到<code>ngrok</code>的一些状态以及一些对资源的分析内容。</p><p>总之，<code>ngrok</code>非常的方便易用，最重要的一点是无需自备服务器，开箱即用，<code>ngrok</code>还提供有其他增强型功能，比如自定义域名、IP黑白名单、隧道客户端、TLS、IP规则等等，但这些都是付费内容，想白嫖的就别想了. :laughing:</p><h2 id=参考链接>参考链接</h2><ul><li>frp GitHub repo: <a href=https://github.com/fatedier/frp>https://github.com/fatedier/frp</a></li><li>nps GitHub repo: <a href=https://github.com/ehang-io/nps>https://github.com/ehang-io/nps</a></li><li>ngrok Offical website: <a href=https://ngrok.com/>https://ngrok.com/</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2021-10-21</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://ictw.github.io/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/ data-title=最全内网穿透工具 data-hashtags=内网穿透><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://ictw.github.io/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/ data-hashtag=内网穿透><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Hacker News" data-sharer=hackernews data-url=https://ictw.github.io/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/ data-title=最全内网穿透工具><i class="fab fa-hacker-news fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://ictw.github.io/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/ data-title=最全内网穿透工具><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://ictw.github.io/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/ data-title=最全内网穿透工具 data-ralateuid=AGou-ops><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=https://ictw.github.io/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/ data-title=最全内网穿透工具><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/baidu.svg></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/loveit/tags/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/>内网穿透</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/loveit/>主页</a></span></section></div><div class=post-nav><a href=/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/ class=prev rel=prev title="手动编译vim增加X Windows Clipboard功能模块"><i class="fas fa-angle-left fa-fw"></i>手动编译vim增加X Windows Clipboard功能模块</a>
+<a href=/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/ class=next rel=next title=K8s网络学习>K8s网络学习<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://agou-ops.github.io/-/ target=_blank rel="noopener noreferrer" style=color:red>【AGou-ops.cn】</a> 备份站点</div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.75.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2018 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/loveit/ target=_blank>AGou-ops</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp>鲁ICP备19050296号-2</span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/twemoji@13.0.0/dist/twemoji.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"AGou-ops/comments"}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"5M8VQRD7W9","algoliaIndex":"blog-2","algoliaSearchKey":"2fcdbd0ce638664e7a28cc64939603b9","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"twemoji":true};</script><script type=text/javascript src=/loveit/js/theme.min.js></script></body></html>

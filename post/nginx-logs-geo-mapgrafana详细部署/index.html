@@ -1,0 +1,794 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>NGINX LOGS & GEO MAP(Grafana)详细部署 - AGou's Blog-2</title><meta name=Description content="关于博主"><meta property="og:title" content="NGINX LOGS & GEO MAP(Grafana)详细部署"><meta property="og:description" content="以上是Grafana Template的页面截图，🔗 https://grafana.com/grafana/dashboards/12268"><meta property="og:type" content="article"><meta property="og:url" content="https://ictw.github.io/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/"><meta property="og:image" content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta property="article:published_time" content="2022-04-24T10:57:38+08:00"><meta property="article:modified_time" content="2022-04-24T10:57:38+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta name=twitter:title content="NGINX LOGS & GEO MAP(Grafana)详细部署"><meta name=twitter:description content="以上是Grafana Template的页面截图，🔗 https://grafana.com/grafana/dashboards/12268"><meta name=application-name content="AGou's Blog-2."><meta name=apple-mobile-web-app-title content="AGou's Blog-2."><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/myBlog-2/favicon.png><link rel=icon type=image/png sizes=32x32 href=/myBlog-2/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/myBlog-2/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ictw.github.io/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/><link rel=prev href=https://ictw.github.io/loveit/post/windows%E6%9C%8D%E5%8A%A1%E6%A3%80%E6%B5%8B%E4%B8%8E%E9%87%8D%E5%90%AFgolang/><link rel=next href=https://ictw.github.io/loveit/post/macos-%E7%BB%88%E7%AB%AF%E4%B8%8B%E5%85%89%E6%A0%87%E7%A7%BB%E5%8A%A8%E9%97%AE%E9%A2%98/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/loveit/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"NGINX LOGS \u0026 GEO MAP(Grafana)详细部署","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ictw.github.io\/loveit\/post\/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2\/"},"image":["https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"],"genre":"posts","wordcount":2806,"url":"https:\/\/ictw.github.io\/loveit\/post\/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2\/","datePublished":"2022-04-24T10:57:38+08:00","dateModified":"2022-04-24T10:57:38+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"AGou-ops","logo":"https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"},"author":{"@type":"Person","name":"AGou-ops"},"description":""}</script></head><body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/myBlog-2/posts/>所有文章 </a><a class=menu-item href=/myBlog-2/tags/>标签 </a><a class=menu-item href=/myBlog-2/categories/>分类 </a><a class=menu-item href=/myBlog-2/anime/>Anime </a><a class=menu-item href=/myBlog-2/about/>关于 </a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value;"><option value=/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/myBlog-2/posts/>所有文章</a><a class=menu-item href=/myBlog-2/tags/>标签</a><a class=menu-item href=/myBlog-2/categories/>分类</a><a class=menu-item href=/myBlog-2/anime/>Anime</a><a class=menu-item href=/myBlog-2/about/>关于</a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value;"><option value=/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/ selected>简体中文</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">NGINX LOGS & GEO MAP(Grafana)详细部署</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/loveit/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>AGou-ops</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2022-04-24>2022-04-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 2806 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#重新编译nginx添加geoip2模块>重新编译nginx添加geoip2模块</a><ul><li><a href=#准备编译环境>准备编译环境</a></li><li><a href=#编译nginx-with-ngx_http_geoip2_module>编译nginx with ngx_http_geoip2_module</a></li><li><a href=#修改nginx配置文件>修改nginx配置文件</a></li></ul></li><li><a href=#使用脚本将日志写入influxdb>使用脚本将日志写入influxDB</a><ul><li><a href=#检查生成的influxdb数据>检查生成的influxDB数据</a></li></ul></li><li><a href=#grafana中添加influxdb数据源>Grafana中添加influxDB数据源</a></li><li><a href=#最终结果>最终结果</a></li><li><a href=#参考链接>参考链接</a></li></ul></nav></div></div><div class=content id=content><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424105947609.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424105947609.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424105947609.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424105947609.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424105947609.png title=image-20220424105947609></p><p>以上是<code>Grafana Template</code>的页面截图，🔗 <a href=https://grafana.com/grafana/dashboards/12268 target=_blank rel="noopener noreffer">https://grafana.com/grafana/dashboards/12268</a></p><h2 id=重新编译nginx添加geoip2模块>重新编译nginx添加geoip2模块</h2><h3 id=准备编译环境>准备编译环境</h3><p>以下以Debian系为例：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>sudo apt install -y build-essential 
+sudo apt install -y git libpcre3 libpcre3-dev openssl libssl-dev zlib1g-dev openssl libssl-dev
+
+<span class=c1># 编译ngx_http_geoip2_module之前需要安装libmaxminddb</span>
+sudo add-apt-repository ppa:maxmind/ppa
+
+sudo apt update
+sudo apt install libmaxminddb0 libmaxminddb-dev mmdb-bin
+</code></pre></td></tr></table></div></div><h3 id=编译nginx-with-ngx_http_geoip2_module>编译nginx with ngx_http_geoip2_module</h3><p><code>ngx_http_geoip2_module</code>模块地址：<a href=https://github.com/leev/ngx_http_geoip2_module target=_blank rel="noopener noreffer">https://github.com/leev/ngx_http_geoip2_module</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 下载nginx源码包</span>
+wget http://nginx.org/download/nginx-1.20.1.tar.gz
+tar xf nginx-1.20.1.tar.gz
+
+<span class=c1># 从github下载ngx_http_geoip2_module源码包</span>
+git clone https://github.com/leev/ngx_http_geoip2_module
+
+<span class=c1># 开始编译</span>
+<span class=nb>cd</span> nginx-1.20.1
+./configure -add-dynamic-module<span class=o>=</span>/root/ngx_http_geoip2_module		<span class=c1># 后面这个是ngx_http_geoip2_module源码包的绝对路径</span>
+make -j <span class=m>2</span>
+make install
+</code></pre></td></tr></table></div></div><blockquote><p>:warning:注意：</p><p>如果编译安装完发现没有生成<code>objs/ngx_http_geoip2_module.so</code>文件，只有<code>objs/ngx_http_geoip2_module.o</code>，那么你可能就需要重新编译安装了；</p><p>编译安装时带上之前的那些参数，直接复制，然后行尾追加ngx_http_geoip2_module动态模块即可。</p><p>如：（PS：其他参数是通过<code>nginx -V</code>获得的）</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>./configure --with-cc-opt<span class=o>=</span><span class=s1>&#39;-g -O2 -fdebug-prefix-map=/build/nginx-7KvRN5/nginx-1.18.0=. -fstack-protector-strong -Wformat -Werror=format-security -fPIC -Wdate-time -D_FORTIFY_SOURCE=2&#39;</span> --with-ld-opt<span class=o>=</span><span class=s1>&#39;-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now -fPIC&#39;</span> --prefix<span class=o>=</span>/usr/share/nginx --conf-path<span class=o>=</span>/etc/nginx/nginx.conf --http-log-path<span class=o>=</span>/var/log/nginx/access.log --error-log-path<span class=o>=</span>/var/log/nginx/error.log --lock-path<span class=o>=</span>/var/lock/nginx.lock --pid-path<span class=o>=</span>/run/nginx.pid --modules-path<span class=o>=</span>/usr/lib/nginx/modules --http-client-body-temp-path<span class=o>=</span>/var/lib/nginx/body --http-fastcgi-temp-path<span class=o>=</span>/var/lib/nginx/fastcgi --http-proxy-temp-path<span class=o>=</span>/var/lib/nginx/proxy --http-scgi-temp-path<span class=o>=</span>/var/lib/nginx/scgi --http-uwsgi-temp-path<span class=o>=</span>/var/lib/nginx/uwsgi --with-debug --with-compat --with-pcre-jit --with-http_ssl_module --with-http_stub_status_module --with-http_realip_module --with-http_auth_request_module --with-http_v2_module --with-http_dav_module --with-http_slice_module --with-threads --with-http_addition_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_image_filter_module<span class=o>=</span>dynamic --with-http_sub_module --with-http_xslt_module<span class=o>=</span>dynamic --with-stream<span class=o>=</span>dynamic --with-stream_ssl_module --with-mail<span class=o>=</span>dynamic --with-mail_ssl_module --add-dynamic-module<span class=o>=</span>/root/ngx_http_geoip2_module
+</code></pre></td></tr></table></div></div></blockquote><p>以下为编译安装之后的相关文件路径：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>  nginx path prefix: <span class=s2>&#34;/usr/local/nginx&#34;</span>
+  nginx binary file: <span class=s2>&#34;/usr/local/nginx/sbin/nginx&#34;</span>
+  nginx modules path: <span class=s2>&#34;/usr/local/nginx/modules&#34;</span>
+  nginx configuration prefix: <span class=s2>&#34;/usr/local/nginx/conf&#34;</span>
+  nginx configuration file: <span class=s2>&#34;/usr/local/nginx/conf/nginx.conf&#34;</span>
+  nginx pid file: <span class=s2>&#34;/usr/local/nginx/logs/nginx.pid&#34;</span>
+  nginx error log file: <span class=s2>&#34;/usr/local/nginx/logs/error.log&#34;</span>
+  nginx http access log file: <span class=s2>&#34;/usr/local/nginx/logs/access.log&#34;</span>
+  nginx http client request body temporary files: <span class=s2>&#34;client_body_temp&#34;</span>
+  nginx http proxy temporary files: <span class=s2>&#34;proxy_temp&#34;</span>
+  nginx http fastcgi temporary files: <span class=s2>&#34;fastcgi_temp&#34;</span>
+  nginx http uwsgi temporary files: <span class=s2>&#34;uwsgi_temp&#34;</span>
+  nginx http scgi temporary files: <span class=s2>&#34;scgi_temp&#34;</span>
+</code></pre></td></tr></table></div></div><h3 id=修改nginx配置文件>修改nginx配置文件</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-shell data-lang=shell>$ vim /usr/local/nginx/conf/nginx.conf
+<span class=c1># 在http里面添加以下内容</span>
+geoip2 /config/geoip2db/GeoLite2-City.mmdb <span class=o>{</span>
+auto_reload 5m<span class=p>;</span>
+<span class=nv>$geoip2_data_country_iso_code</span> country iso_code<span class=p>;</span>
+<span class=nv>$geoip2_data_city_name</span> city names en<span class=p>;</span>
+<span class=o>}</span>
+<span class=c1># 自定义日志文件格式</span>
+log_format custom <span class=s1>&#39;$remote_addr - $remote_user [$time_local]&#39;</span>
+           <span class=s1>&#39;&#34;$request&#34; $status $body_bytes_sent&#39;</span>
+           <span class=s1>&#39;&#34;$http_referer&#34; $host &#34;$http_user_agent&#34;&#39;</span>
+           <span class=s1>&#39;&#34;$request_time&#34; &#34;$upstream_connect_time&#34;&#39;</span>
+           <span class=s1>&#39;&#34;$geoip2_data_city_name&#34; &#34;$geoip2_data_country_iso_code&#34;&#39;</span><span class=p>;</span>
+           
+access_log /config/log/nginx/access.log custom<span class=p>;</span>
+</code></pre></td></tr></table></div></div><p>:information_source:<code>GeoLite2-City.mmdb</code>文件可以从<a href="https://github.com/search?q=GeoLite2-City.mmdb" target=_blank rel="noopener noreffer">GitHub下载</a>或者自己注册一个账号下载：<a href=https://www.maxmind.com/en/geolite2/signup target=_blank rel="noopener noreffer">https://www.maxmind.com/en/geolite2/signup</a></p><p>修改完成之后重启nginx，<code>systemctl restart nginx</code></p><h2 id=使用脚本将日志写入influxdb>使用脚本将日志写入influxDB</h2><p>运行脚本之前，安装一下<code>influxDB</code>，注意安装版本要使用<code>1.8x</code>版本，新版<code>2.x</code>版本不可以，github releases地址：<a href=https://github.com/influxdata/influxdb/releases target=_blank rel="noopener noreffer">https://github.com/influxdata/influxdb/releases</a></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 安装influxdb</span>
+wget https://dl.influxdata.com/influxdb/releases/influxdb_1.8.10_amd64.deb
+sudo dpkg -i influxdb_1.8.10_amd64.deb
+systemctl start influxdb
+</code></pre></td></tr></table></div></div><p>Python脚本<code>geoip2influx.py</code>内容如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span><span class=lnt>194
+</span><span class=lnt>195
+</span><span class=lnt>196
+</span><span class=lnt>197
+</span><span class=lnt>198
+</span><span class=lnt>199
+</span><span class=lnt>200
+</span><span class=lnt>201
+</span><span class=lnt>202
+</span><span class=lnt>203
+</span><span class=lnt>204
+</span><span class=lnt>205
+</span><span class=lnt>206
+</span><span class=lnt>207
+</span><span class=lnt>208
+</span><span class=lnt>209
+</span><span class=lnt>210
+</span><span class=lnt>211
+</span><span class=lnt>212
+</span><span class=lnt>213
+</span><span class=lnt>214
+</span><span class=lnt>215
+</span><span class=lnt>216
+</span><span class=lnt>217
+</span><span class=lnt>218
+</span><span class=lnt>219
+</span><span class=lnt>220
+</span><span class=lnt>221
+</span><span class=lnt>222
+</span><span class=lnt>223
+</span><span class=lnt>224
+</span><span class=lnt>225
+</span><span class=lnt>226
+</span><span class=lnt>227
+</span><span class=lnt>228
+</span><span class=lnt>229
+</span><span class=lnt>230
+</span><span class=lnt>231
+</span><span class=lnt>232
+</span><span class=lnt>233
+</span><span class=lnt>234
+</span><span class=lnt>235
+</span><span class=lnt>236
+</span><span class=lnt>237
+</span><span class=lnt>238
+</span><span class=lnt>239
+</span><span class=lnt>240
+</span><span class=lnt>241
+</span><span class=lnt>242
+</span><span class=lnt>243
+</span><span class=lnt>244
+</span><span class=lnt>245
+</span><span class=lnt>246
+</span><span class=lnt>247
+</span><span class=lnt>248
+</span><span class=lnt>249
+</span><span class=lnt>250
+</span><span class=lnt>251
+</span><span class=lnt>252
+</span><span class=lnt>253
+</span><span class=lnt>254
+</span><span class=lnt>255
+</span><span class=lnt>256
+</span><span class=lnt>257
+</span><span class=lnt>258
+</span><span class=lnt>259
+</span><span class=lnt>260
+</span><span class=lnt>261
+</span><span class=lnt>262
+</span><span class=lnt>263
+</span><span class=lnt>264
+</span><span class=lnt>265
+</span><span class=lnt>266
+</span><span class=lnt>267
+</span><span class=lnt>268
+</span><span class=lnt>269
+</span><span class=lnt>270
+</span><span class=lnt>271
+</span><span class=lnt>272
+</span><span class=lnt>273
+</span><span class=lnt>274
+</span><span class=lnt>275
+</span><span class=lnt>276
+</span><span class=lnt>277
+</span><span class=lnt>278
+</span><span class=lnt>279
+</span><span class=lnt>280
+</span><span class=lnt>281
+</span><span class=lnt>282
+</span><span class=lnt>283
+</span><span class=lnt>284
+</span><span class=lnt>285
+</span><span class=lnt>286
+</span><span class=lnt>287
+</span><span class=lnt>288
+</span><span class=lnt>289
+</span><span class=lnt>290
+</span><span class=lnt>291
+</span><span class=lnt>292
+</span><span class=lnt>293
+</span><span class=lnt>294
+</span><span class=lnt>295
+</span><span class=lnt>296
+</span><span class=lnt>297
+</span><span class=lnt>298
+</span><span class=lnt>299
+</span><span class=lnt>300
+</span><span class=lnt>301
+</span><span class=lnt>302
+</span><span class=lnt>303
+</span><span class=lnt>304
+</span><span class=lnt>305
+</span><span class=lnt>306
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-python data-lang=python><span class=ch>#! /usr/bin/env python3</span>
+
+<span class=kn>from</span> <span class=nn>os.path</span> <span class=kn>import</span> <span class=n>exists</span><span class=p>,</span> <span class=n>isfile</span>
+<span class=kn>from</span> <span class=nn>os</span> <span class=kn>import</span> <span class=n>environ</span> <span class=k>as</span> <span class=n>env</span><span class=p>,</span> <span class=n>stat</span>
+<span class=kn>from</span> <span class=nn>platform</span> <span class=kn>import</span> <span class=n>uname</span>
+<span class=kn>from</span> <span class=nn>re</span> <span class=kn>import</span> <span class=nb>compile</span><span class=p>,</span> <span class=n>match</span><span class=p>,</span> <span class=n>search</span><span class=p>,</span> <span class=n>IGNORECASE</span>
+<span class=kn>from</span> <span class=nn>sys</span> <span class=kn>import</span> <span class=n>path</span><span class=p>,</span> <span class=nb>exit</span>
+<span class=kn>from</span> <span class=nn>time</span> <span class=kn>import</span> <span class=n>sleep</span><span class=p>,</span> <span class=n>time</span>
+<span class=kn>from</span> <span class=nn>datetime</span> <span class=kn>import</span> <span class=n>datetime</span>
+<span class=kn>import</span> <span class=nn>logging</span>
+
+<span class=kn>from</span> <span class=nn>geoip2.database</span> <span class=kn>import</span> <span class=n>Reader</span>
+<span class=kn>from</span> <span class=nn>geohash2</span> <span class=kn>import</span> <span class=n>encode</span>
+<span class=kn>from</span> <span class=nn>influxdb</span> <span class=kn>import</span> <span class=n>InfluxDBClient</span>
+<span class=kn>from</span> <span class=nn>requests.exceptions</span> <span class=kn>import</span> <span class=n>ConnectionError</span>
+<span class=kn>from</span> <span class=nn>influxdb.exceptions</span> <span class=kn>import</span> <span class=n>InfluxDBServerError</span><span class=p>,</span> <span class=n>InfluxDBClientError</span>
+<span class=kn>from</span> <span class=nn>IPy</span> <span class=kn>import</span> <span class=n>IP</span> <span class=k>as</span> <span class=n>ipadd</span>
+
+
+<span class=c1># Getting params from envs</span>
+<span class=n>geoip_db_path</span> <span class=o>=</span> <span class=s1>&#39;/config/geoip2db/GeoLite2-City.mmdb&#39;</span>
+<span class=n>log_path</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;NGINX_LOG_PATH&#39;</span><span class=p>,</span> <span class=s1>&#39;/config/log/nginx/access.log&#39;</span><span class=p>)</span>
+<span class=n>influxdb_host</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;INFLUX_HOST&#39;</span><span class=p>,</span> <span class=s1>&#39;localhost&#39;</span><span class=p>)</span>
+<span class=n>influxdb_port</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;INFLUX_HOST_PORT&#39;</span><span class=p>,</span> <span class=s1>&#39;8086&#39;</span><span class=p>)</span>
+<span class=n>influxdb_database</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;INFLUX_DATABASE&#39;</span><span class=p>,</span> <span class=s1>&#39;geoip2influx&#39;</span><span class=p>)</span>
+<span class=n>influxdb_user</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;INFLUX_USER&#39;</span><span class=p>,</span> <span class=s1>&#39;root&#39;</span><span class=p>)</span>
+<span class=n>influxdb_user_pass</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;INFLUX_PASS&#39;</span><span class=p>,</span> <span class=s1>&#39;root&#39;</span><span class=p>)</span>
+<span class=n>influxdb_retention</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;INFLUX_RETENTION&#39;</span><span class=p>,</span><span class=s1>&#39;7d&#39;</span><span class=p>)</span>
+<span class=n>influxdb_shard</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;INFLUX_SHARD&#39;</span><span class=p>,</span> <span class=s1>&#39;1d&#39;</span><span class=p>)</span>
+<span class=n>geo_measurement</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;GEO_MEASUREMENT&#39;</span><span class=p>,</span> <span class=s1>&#39;geoip2influx&#39;</span><span class=p>)</span>
+<span class=n>log_measurement</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;LOG_MEASUREMENT&#39;</span><span class=p>,</span> <span class=s1>&#39;nginx_access_logs&#39;</span><span class=p>)</span>
+<span class=n>send_nginx_logs</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;SEND_NGINX_LOGS&#39;</span><span class=p>,</span><span class=s1>&#39;true&#39;</span><span class=p>)</span>
+<span class=n>log_level</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;GEOIP2INFLUX_LOG_LEVEL&#39;</span><span class=p>,</span> <span class=s1>&#39;info&#39;</span><span class=p>)</span><span class=o>.</span><span class=n>upper</span><span class=p>()</span>
+<span class=n>g2i_log_path</span> <span class=o>=</span> <span class=n>env</span><span class=o>.</span><span class=n>get</span><span class=p>(</span><span class=s1>&#39;GEOIP2INFLUX_LOG_PATH&#39;</span><span class=p>,</span><span class=s1>&#39;/config/log/geoip2influx/geoip2influx.log&#39;</span><span class=p>)</span>
+
+<span class=c1># Logging</span>
+<span class=n>logging</span><span class=o>.</span><span class=n>basicConfig</span><span class=p>(</span><span class=n>level</span><span class=o>=</span><span class=n>log_level</span><span class=p>,</span><span class=n>format</span><span class=o>=</span><span class=s1>&#39;GEOIP2INFLUX </span><span class=si>%(asctime)s</span><span class=s1> :: </span><span class=si>%(levelname)s</span><span class=s1> :: </span><span class=si>%(message)s</span><span class=s1>&#39;</span><span class=p>,</span><span class=n>datefmt</span><span class=o>=</span><span class=s1>&#39;</span><span class=si>%d</span><span class=s1>/%b/%Y %H:%M:%S&#39;</span><span class=p>,</span><span class=n>handlers</span><span class=o>=</span><span class=p>[</span><span class=n>logging</span><span class=o>.</span><span class=n>StreamHandler</span><span class=p>(),</span><span class=n>logging</span><span class=o>.</span><span class=n>FileHandler</span><span class=p>(</span><span class=n>g2i_log_path</span><span class=p>)])</span>
+
+<span class=c1># global variables</span>
+<span class=n>monitored_ip_types</span> <span class=o>=</span> <span class=p>[</span><span class=s1>&#39;PUBLIC&#39;</span><span class=p>,</span> <span class=s1>&#39;ALLOCATED APNIC&#39;</span><span class=p>,</span> <span class=s1>&#39;ALLOCATED ARIN&#39;</span><span class=p>,</span> <span class=s1>&#39;ALLOCATED RIPE NCC&#39;</span><span class=p>,</span> <span class=s1>&#39;ALLOCATED LACNIC&#39;</span><span class=p>,</span> <span class=s1>&#39;ALLOCATED AFRINIC&#39;</span><span class=p>]</span>
+
+
+<span class=k>def</span> <span class=nf>regex_tester</span><span class=p>(</span><span class=n>log_path</span><span class=p>,</span> <span class=n>N</span><span class=p>):</span>
+    <span class=n>time_out</span> <span class=o>=</span> <span class=n>time</span><span class=p>()</span> <span class=o>+</span> <span class=mi>60</span>
+    <span class=n>re_ipv4</span> <span class=o>=</span> <span class=nb>compile</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})&#39;</span><span class=p>)</span>
+    <span class=n>re_ipv6</span> <span class=o>=</span> <span class=nb>compile</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))&#39;</span><span class=p>)</span> <span class=c1># NOQA</span>
+    <span class=k>while</span> <span class=bp>True</span><span class=p>:</span>
+        <span class=k>assert</span> <span class=n>N</span> <span class=o>&gt;=</span> <span class=mi>0</span>
+        <span class=n>pos</span> <span class=o>=</span> <span class=n>N</span> <span class=o>+</span> <span class=mi>1</span>
+        <span class=n>lines</span> <span class=o>=</span> <span class=p>[]</span>
+        <span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=n>log_path</span><span class=p>)</span> <span class=k>as</span> <span class=n>f</span><span class=p>:</span>
+            <span class=k>while</span> <span class=nb>len</span><span class=p>(</span><span class=n>lines</span><span class=p>)</span> <span class=o>&lt;=</span> <span class=n>N</span><span class=p>:</span>
+                <span class=k>try</span><span class=p>:</span>
+                    <span class=n>f</span><span class=o>.</span><span class=n>seek</span><span class=p>(</span><span class=o>-</span><span class=n>pos</span><span class=p>,</span> <span class=mi>2</span><span class=p>)</span>
+                <span class=k>except</span> <span class=ne>IOError</span><span class=p>:</span>
+                    <span class=n>f</span><span class=o>.</span><span class=n>seek</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
+                    <span class=k>break</span>
+                <span class=k>finally</span><span class=p>:</span>
+                    <span class=n>lines</span> <span class=o>=</span> <span class=nb>list</span><span class=p>(</span><span class=n>f</span><span class=p>)</span>
+                <span class=n>pos</span> <span class=o>*=</span> <span class=mi>2</span>
+        <span class=n>log_lines</span> <span class=o>=</span> <span class=n>lines</span><span class=p>[</span><span class=o>-</span><span class=n>N</span><span class=p>:]</span>
+        <span class=k>for</span> <span class=n>line</span> <span class=ow>in</span> <span class=n>log_lines</span><span class=p>:</span>
+            <span class=k>if</span> <span class=n>re_ipv4</span><span class=o>.</span><span class=n>match</span><span class=p>(</span><span class=n>line</span><span class=p>):</span>
+                <span class=n>regex</span> <span class=o>=</span> <span class=nb>compile</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;(?P&lt;ipaddress&gt;\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - (?P&lt;remote_user&gt;.+) \[(?P&lt;dateandtime&gt;\d{2}\/[A-Z]{1}[a-z]{2}\/\d{4}:\d{2}:\d{2}:\d{2} ((\+|\-)\d{4}))\]([&#34;](?P&lt;method&gt;.+)) (?P&lt;referrer&gt;.+) ((?P&lt;http_version&gt;HTTP\/[1-3]\.[0-9])[&#34;]) (?P&lt;status_code&gt;\d{3}) (?P&lt;bytes_sent&gt;\d{1,99})([&#34;](?P&lt;url&gt;(\-)|(.+))[&#34;]) (?P&lt;host&gt;.+) ([&#34;](?P&lt;user_agent&gt;.+)[&#34;])([&#34;](?P&lt;request_time&gt;.+)[&#34;]) ([&#34;](?P&lt;connect_time&gt;.+)[&#34;])([&#34;](?P&lt;city&gt;.+)[&#34;]) ([&#34;](?P&lt;country_code&gt;.+)[&#34;])&#39;</span><span class=p>,</span> <span class=n>IGNORECASE</span><span class=p>)</span> <span class=c1># NOQA</span>
+                <span class=k>if</span> <span class=n>regex</span><span class=o>.</span><span class=n>match</span><span class=p>(</span><span class=n>line</span><span class=p>):</span>
+                    <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;Regex is matching {log_path} continuing...&#39;</span><span class=p>)</span>
+                    <span class=k>return</span> <span class=bp>True</span>
+            <span class=k>if</span> <span class=n>re_ipv6</span><span class=o>.</span><span class=n>match</span><span class=p>(</span><span class=n>line</span><span class=p>):</span>
+                <span class=n>regex</span> <span class=o>=</span> <span class=nb>compile</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;(?P&lt;ipaddress&gt;(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))) - (?P&lt;remote_user&gt;.+) \[(?P&lt;dateandtime&gt;\d{2}\/[A-Z]{1}[a-z]{2}\/\d{4}:\d{2}:\d{2}:\d{2} ((\+|\-)\d{4}))\]([&#34;](?P&lt;method&gt;.+)) (?P&lt;referrer&gt;.+) ((?P&lt;http_version&gt;HTTP\/[1-3]\.[0-9])[&#34;]) (?P&lt;status_code&gt;\d{3}) (?P&lt;bytes_sent&gt;\d{1,99})([&#34;](?P&lt;url&gt;(\-)|(.+))[&#34;]) (?P&lt;host&gt;.+) ([&#34;](?P&lt;user_agent&gt;.+)[&#34;])([&#34;](?P&lt;request_time&gt;.+)[&#34;]) ([&#34;](?P&lt;connect_time&gt;.+)[&#34;])([&#34;](?P&lt;city&gt;.+)[&#34;]) ([&#34;](?P&lt;country_code&gt;.+)[&#34;])&#39;</span><span class=p>,</span> <span class=n>IGNORECASE</span><span class=p>)</span> <span class=c1># NOQA</span>
+                <span class=k>if</span> <span class=n>regex</span><span class=o>.</span><span class=n>match</span><span class=p>(</span><span class=n>line</span><span class=p>):</span>
+                    <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;Regex is matching {log_path} continuing...&#39;</span><span class=p>)</span>
+                    <span class=k>return</span> <span class=bp>True</span>
+            <span class=k>else</span><span class=p>:</span>
+                <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;Testing regex on: {log_path}&#39;</span><span class=p>)</span>
+                <span class=n>sleep</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span>
+        <span class=k>if</span> <span class=n>time</span><span class=p>()</span> <span class=o>&gt;</span> <span class=n>time_out</span><span class=p>:</span>
+            <span class=n>logging</span><span class=o>.</span><span class=n>warning</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;Failed to match regex on: {log_path}&#39;</span><span class=p>)</span>
+            <span class=k>break</span>
+
+
+<span class=k>def</span> <span class=nf>file_exists</span><span class=p>(</span><span class=n>log_path</span><span class=p>,</span><span class=n>geoip_db_path</span><span class=p>):</span>
+    <span class=n>time_out</span> <span class=o>=</span> <span class=n>time</span><span class=p>()</span> <span class=o>+</span> <span class=mi>30</span>
+    <span class=k>while</span> <span class=bp>True</span><span class=p>:</span>
+        <span class=n>file_list</span> <span class=o>=</span> <span class=p>[</span><span class=n>log_path</span><span class=p>,</span> <span class=n>geoip_db_path</span><span class=p>]</span>
+        <span class=k>if</span> <span class=ow>not</span> <span class=n>exists</span><span class=p>(</span><span class=n>log_path</span><span class=p>):</span>
+            <span class=n>logging</span><span class=o>.</span><span class=n>warning</span><span class=p>((</span><span class=n>f</span><span class=s1>&#39;File: {log_path} not found...&#39;</span><span class=p>))</span>
+            <span class=n>sleep</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+        <span class=k>if</span> <span class=ow>not</span> <span class=n>exists</span><span class=p>(</span><span class=n>geoip_db_path</span><span class=p>):</span>
+            <span class=n>logging</span><span class=o>.</span><span class=n>warning</span><span class=p>((</span><span class=n>f</span><span class=s1>&#39;File: {geoip_db_path} not found...&#39;</span><span class=p>))</span>
+            <span class=n>sleep</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+        <span class=k>if</span> <span class=nb>all</span><span class=p>([</span><span class=n>isfile</span><span class=p>(</span><span class=n>f</span><span class=p>)</span> <span class=k>for</span> <span class=n>f</span> <span class=ow>in</span> <span class=n>file_list</span><span class=p>]):</span>
+            <span class=k>for</span> <span class=n>f</span> <span class=ow>in</span> <span class=n>file_list</span><span class=p>:</span>
+                <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;Found: {f}&#39;</span><span class=p>)</span>
+            <span class=k>return</span> <span class=bp>True</span>
+        <span class=k>if</span> <span class=n>time</span><span class=p>()</span> <span class=o>&gt;</span> <span class=n>time_out</span><span class=p>:</span>
+            <span class=k>if</span> <span class=ow>not</span> <span class=n>exists</span><span class=p>(</span><span class=n>geoip_db_path</span><span class=p>)</span> <span class=ow>and</span> <span class=ow>not</span> <span class=n>exists</span><span class=p>(</span><span class=n>log_path</span><span class=p>):</span>
+                <span class=n>logging</span><span class=o>.</span><span class=n>critical</span><span class=p>(</span><span class=n>f</span><span class=s2>&#34;Can&#39;t find: {geoip_db_path} or {log_path} exiting!&#34;</span><span class=p>)</span>
+                <span class=k>break</span>
+            <span class=k>elif</span> <span class=ow>not</span> <span class=n>exists</span><span class=p>(</span><span class=n>geoip_db_path</span><span class=p>):</span>
+                <span class=n>logging</span><span class=o>.</span><span class=n>critical</span><span class=p>(</span><span class=n>f</span><span class=s2>&#34;Can&#39;t find: {geoip_db_path}, exiting!&#34;</span><span class=p>)</span>
+                <span class=k>break</span>
+            <span class=k>elif</span> <span class=ow>not</span> <span class=n>exists</span><span class=p>(</span><span class=n>log_path</span><span class=p>):</span>
+                <span class=n>logging</span><span class=o>.</span><span class=n>critical</span><span class=p>(</span><span class=n>f</span><span class=s2>&#34;Can&#39;t find: {log_path}, exiting!&#34;</span><span class=p>)</span>
+                <span class=k>break</span>
+
+
+<span class=k>def</span> <span class=nf>logparse</span><span class=p>(</span>
+        <span class=n>log_path</span><span class=p>,</span> <span class=n>influxdb_host</span><span class=p>,</span> <span class=n>influxdb_port</span><span class=p>,</span> <span class=n>influxdb_database</span><span class=p>,</span> <span class=n>influxdb_user</span><span class=p>,</span> <span class=n>influxdb_user_pass</span><span class=p>,</span> <span class=n>influxdb_retention</span><span class=p>,</span>
+        <span class=n>influxdb_shard</span><span class=p>,</span> <span class=n>geo_measurement</span><span class=p>,</span> <span class=n>log_measurement</span><span class=p>,</span> <span class=n>send_nginx_logs</span><span class=p>,</span> <span class=n>geoip_db_path</span><span class=p>,</span> <span class=n>inode</span><span class=p>):</span>
+    <span class=c1># Preparing variables and params</span>
+    <span class=n>ips</span> <span class=o>=</span> <span class=p>{}</span>
+    <span class=n>geohash_fields</span> <span class=o>=</span> <span class=p>{}</span>
+    <span class=n>geohash_tags</span> <span class=o>=</span> <span class=p>{}</span>
+    <span class=n>log_data_fields</span> <span class=o>=</span> <span class=p>{}</span>
+    <span class=n>log_data_tags</span> <span class=o>=</span> <span class=p>{}</span>
+    <span class=n>nginx_log</span> <span class=o>=</span> <span class=p>{}</span>
+    <span class=n>hostname</span> <span class=o>=</span> <span class=n>uname</span><span class=p>()[</span><span class=mi>1</span><span class=p>]</span>
+    <span class=n>client</span> <span class=o>=</span> <span class=n>InfluxDBClient</span><span class=p>(</span>
+        <span class=n>host</span><span class=o>=</span><span class=n>influxdb_host</span><span class=p>,</span> <span class=n>port</span><span class=o>=</span><span class=n>influxdb_port</span><span class=p>,</span> <span class=n>username</span><span class=o>=</span><span class=n>influxdb_user</span><span class=p>,</span> <span class=n>password</span><span class=o>=</span><span class=n>influxdb_user_pass</span><span class=p>,</span> <span class=n>database</span><span class=o>=</span><span class=n>influxdb_database</span><span class=p>)</span>
+
+    <span class=k>try</span><span class=p>:</span>
+        <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=s1>&#39;Testing InfluxDB connection&#39;</span><span class=p>)</span>
+        <span class=n>version</span> <span class=o>=</span> <span class=n>client</span><span class=o>.</span><span class=n>request</span><span class=p>(</span><span class=s1>&#39;ping&#39;</span><span class=p>,</span> <span class=n>expected_response_code</span><span class=o>=</span><span class=mi>204</span><span class=p>)</span><span class=o>.</span><span class=n>headers</span><span class=p>[</span><span class=s1>&#39;X-Influxdb-Version&#39;</span><span class=p>]</span>
+        <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;Influxdb version: {version}&#39;</span><span class=p>)</span>
+    <span class=k>except</span> <span class=n>ConnectionError</span> <span class=k>as</span> <span class=n>e</span><span class=p>:</span>
+        <span class=n>logging</span><span class=o>.</span><span class=n>critical</span><span class=p>(</span><span class=s1>&#39;Error testing connection to InfluxDB. Please check your url/hostname.</span><span class=se>\n</span><span class=s1>&#39;</span>
+                         <span class=n>f</span><span class=s1>&#39;Error: {e}&#39;</span>
+                        <span class=p>)</span>
+        <span class=nb>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+
+    <span class=k>try</span><span class=p>:</span>
+        <span class=n>databases</span> <span class=o>=</span> <span class=p>[</span><span class=n>db</span><span class=p>[</span><span class=s1>&#39;name&#39;</span><span class=p>]</span> <span class=k>for</span> <span class=n>db</span> <span class=ow>in</span> <span class=n>client</span><span class=o>.</span><span class=n>get_list_database</span><span class=p>()]</span>
+        <span class=k>if</span> <span class=n>influxdb_database</span> <span class=ow>in</span> <span class=n>databases</span><span class=p>:</span>    
+            <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;Found database: {influxdb_database}&#39;</span><span class=p>)</span>
+    <span class=k>except</span> <span class=n>InfluxDBClientError</span> <span class=k>as</span> <span class=n>e</span><span class=p>:</span>
+        <span class=n>logging</span><span class=o>.</span><span class=n>critical</span><span class=p>(</span><span class=s1>&#39;Error getting database list! Please check your InfluxDB configuration.</span><span class=se>\n</span><span class=s1>&#39;</span>
+                         <span class=n>f</span><span class=s1>&#39;Error: {e}&#39;</span>
+                        <span class=p>)</span>
+        <span class=nb>exit</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+
+    <span class=k>if</span> <span class=n>influxdb_database</span> <span class=ow>not</span> <span class=ow>in</span> <span class=n>databases</span><span class=p>:</span>
+        <span class=n>logging</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;Creating database: {influxdb_database}&#39;</span><span class=p>)</span>
+        <span class=n>client</span><span class=o>.</span><span class=n>create_database</span><span class=p>(</span><span class=n>influxdb_database</span><span class=p>)</span>
+
+        <span class=n>retention_policies</span> <span class=o>=</span> <span class=p>[</span><span class=n>policy</span><span class=p>[</span><span class=s1>&#39;name&#39;</span><span class=p>]</span> <span class=k>for</span> <span class=n>policy</span> <span class=ow>in</span> <span class=n>client</span><span class=o>.</span><span class=n>get_list_retention_policies</span><span class=p>(</span><span class=n>database</span><span class=o>=</span><span class=n>influxdb_database</span><span class=p>)]</span>
+        <span class=k>if</span> <span class=n>f</span><span class=s1>&#39;{influxdb_database} {influxdb_retention}-{influxdb_shard}&#39;</span> <span class=ow>not</span> <span class=ow>in</span> <span class=n>retention_policies</span><span class=p>:</span>
+            <span class=n>logging</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;Creating {influxdb_database} retention policy ({influxdb_retention}-{influxdb_shard})&#39;</span><span class=p>)</span>
+            <span class=n>client</span><span class=o>.</span><span class=n>create_retention_policy</span><span class=p>(</span><span class=n>name</span><span class=o>=</span><span class=n>f</span><span class=s1>&#39;{influxdb_database} {influxdb_retention}-{influxdb_shard}&#39;</span><span class=p>,</span> <span class=n>duration</span><span class=o>=</span><span class=n>influxdb_retention</span><span class=p>,</span> <span class=n>replication</span><span class=o>=</span><span class=s1>&#39;1&#39;</span><span class=p>,</span>
+                                                <span class=n>database</span><span class=o>=</span><span class=n>influxdb_database</span><span class=p>,</span> <span class=n>default</span><span class=o>=</span><span class=bp>True</span><span class=p>,</span> <span class=n>shard_duration</span><span class=o>=</span><span class=n>influxdb_shard</span><span class=p>)</span>
+
+    <span class=n>re_ipv4</span> <span class=o>=</span> <span class=nb>compile</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;(?P&lt;ipaddress&gt;\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}) - (?P&lt;remote_user&gt;.+) \[(?P&lt;dateandtime&gt;\d{2}\/[A-Z]{1}[a-z]{2}\/\d{4}:\d{2}:\d{2}:\d{2} ((\+|\-)\d{4}))\]([&#34;](?P&lt;method&gt;.+)) (?P&lt;referrer&gt;.+) ((?P&lt;http_version&gt;HTTP\/[1-3]\.[0-9])[&#34;]) (?P&lt;status_code&gt;\d{3}) (?P&lt;bytes_sent&gt;\d{1,99})([&#34;](?P&lt;url&gt;(\-)|(.+))[&#34;]) (?P&lt;host&gt;.+) ([&#34;](?P&lt;user_agent&gt;.+)[&#34;])([&#34;](?P&lt;request_time&gt;.+)[&#34;]) ([&#34;](?P&lt;connect_time&gt;.+)[&#34;])([&#34;](?P&lt;city&gt;.+)[&#34;]) ([&#34;](?P&lt;country_code&gt;.+)[&#34;])&#39;</span><span class=p>,</span> <span class=n>IGNORECASE</span><span class=p>)</span> <span class=c1># NOQA</span>
+    <span class=n>re_ipv6</span> <span class=o>=</span> <span class=nb>compile</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;(?P&lt;ipaddress&gt;(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))) - (?P&lt;remote_user&gt;.+) \[(?P&lt;dateandtime&gt;\d{2}\/[A-Z]{1}[a-z]{2}\/\d{4}:\d{2}:\d{2}:\d{2} ((\+|\-)\d{4}))\]([&#34;](?P&lt;method&gt;.+)) (?P&lt;referrer&gt;.+) ((?P&lt;http_version&gt;HTTP\/[1-3]\.[0-9])[&#34;]) (?P&lt;status_code&gt;\d{3}) (?P&lt;bytes_sent&gt;\d{1,99})([&#34;](?P&lt;url&gt;(\-)|(.+))[&#34;]) (?P&lt;host&gt;.+) ([&#34;](?P&lt;user_agent&gt;.+)[&#34;])([&#34;](?P&lt;request_time&gt;.+)[&#34;]) ([&#34;](?P&lt;connect_time&gt;.+)[&#34;])([&#34;](?P&lt;city&gt;.+)[&#34;]) ([&#34;](?P&lt;country_code&gt;.+)[&#34;])&#39;</span><span class=p>,</span> <span class=n>IGNORECASE</span><span class=p>)</span> <span class=c1># NOQA</span>
+
+    <span class=n>gi</span> <span class=o>=</span> <span class=n>Reader</span><span class=p>(</span><span class=n>geoip_db_path</span><span class=p>)</span>
+
+    <span class=k>if</span> <span class=n>send_nginx_logs</span> <span class=ow>in</span> <span class=p>(</span><span class=s1>&#39;true&#39;</span><span class=p>,</span> <span class=s1>&#39;True&#39;</span><span class=p>):</span>
+        <span class=n>send_logs</span> <span class=o>=</span> <span class=bp>True</span>
+    <span class=k>else</span><span class=p>:</span>
+        <span class=n>send_logs</span> <span class=o>=</span> <span class=bp>False</span>
+        <span class=n>re_ipv4</span> <span class=o>=</span> <span class=nb>compile</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})&#39;</span><span class=p>)</span>
+        <span class=n>re_ipv6</span> <span class=o>=</span> <span class=nb>compile</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))&#39;</span><span class=p>)</span> <span class=c1># NOQA</span>
+        <span class=n>logging</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=s1>&#39;SEND_NGINX_LOGS set to false&#39;</span><span class=p>)</span>
+        <span class=k>pass</span>
+    <span class=k>if</span> <span class=ow>not</span> <span class=n>regex_tester</span><span class=p>(</span><span class=n>log_path</span><span class=p>,</span><span class=mi>3</span><span class=p>):</span>
+        <span class=k>if</span> <span class=n>send_logs</span><span class=p>:</span>
+            <span class=n>re_ipv4</span> <span class=o>=</span> <span class=nb>compile</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})&#39;</span><span class=p>)</span>
+            <span class=n>re_ipv6</span> <span class=o>=</span> <span class=nb>compile</span><span class=p>(</span><span class=sa>r</span><span class=s1>&#39;(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))&#39;</span><span class=p>)</span> <span class=c1># NOQA</span>
+            <span class=n>send_logs</span> <span class=o>=</span> <span class=bp>False</span>
+            <span class=n>logging</span><span class=o>.</span><span class=n>warning</span><span class=p>(</span><span class=s1>&#39;NGINX log metrics disabled! Double check your NGINX custom log format..&#39;</span><span class=p>)</span>
+
+    <span class=c1># Main loop to parse access.log file in tailf style with sending metrics.</span>
+    <span class=k>with</span> <span class=nb>open</span><span class=p>(</span><span class=n>log_path</span><span class=p>,</span> <span class=s1>&#39;r&#39;</span><span class=p>)</span> <span class=k>as</span> <span class=n>log_file</span><span class=p>:</span>
+        <span class=n>logging</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=s1>&#39;Starting log parsing&#39;</span><span class=p>)</span>
+        <span class=n>str_results</span> <span class=o>=</span> <span class=n>stat</span><span class=p>(</span><span class=n>log_path</span><span class=p>)</span>
+        <span class=n>st_size</span> <span class=o>=</span> <span class=n>str_results</span><span class=p>[</span><span class=mi>6</span><span class=p>]</span>
+        <span class=n>log_file</span><span class=o>.</span><span class=n>seek</span><span class=p>(</span><span class=n>st_size</span><span class=p>)</span>
+        <span class=k>while</span> <span class=bp>True</span><span class=p>:</span>
+            <span class=n>geo_metrics</span> <span class=o>=</span> <span class=p>[]</span>
+            <span class=n>log_metrics</span> <span class=o>=</span> <span class=p>[]</span>
+            <span class=n>where</span> <span class=o>=</span> <span class=n>log_file</span><span class=o>.</span><span class=n>tell</span><span class=p>()</span>
+            <span class=n>line</span> <span class=o>=</span> <span class=n>log_file</span><span class=o>.</span><span class=n>readline</span><span class=p>()</span>
+            <span class=n>inodenew</span> <span class=o>=</span> <span class=n>stat</span><span class=p>(</span><span class=n>log_path</span><span class=p>)</span><span class=o>.</span><span class=n>st_ino</span>
+            <span class=k>if</span> <span class=n>inode</span> <span class=o>!=</span> <span class=n>inodenew</span><span class=p>:</span>
+                <span class=k>break</span>
+            <span class=k>if</span> <span class=ow>not</span> <span class=n>line</span><span class=p>:</span>
+                <span class=n>sleep</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+                <span class=n>log_file</span><span class=o>.</span><span class=n>seek</span><span class=p>(</span><span class=n>where</span><span class=p>)</span>
+            <span class=k>else</span><span class=p>:</span>
+                <span class=k>if</span> <span class=n>re_ipv4</span><span class=o>.</span><span class=n>match</span><span class=p>(</span><span class=n>line</span><span class=p>):</span>
+                    <span class=n>m</span> <span class=o>=</span> <span class=n>re_ipv4</span><span class=o>.</span><span class=n>match</span><span class=p>(</span><span class=n>line</span><span class=p>)</span>
+                    <span class=n>ip</span> <span class=o>=</span> <span class=n>m</span><span class=o>.</span><span class=n>group</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+                    <span class=n>log</span> <span class=o>=</span> <span class=n>re_ipv4</span>
+                <span class=k>elif</span> <span class=n>re_ipv6</span><span class=o>.</span><span class=n>match</span><span class=p>(</span><span class=n>line</span><span class=p>):</span>
+                    <span class=n>m</span> <span class=o>=</span> <span class=n>re_ipv6</span><span class=o>.</span><span class=n>match</span><span class=p>(</span><span class=n>line</span><span class=p>)</span>
+                    <span class=n>ip</span> <span class=o>=</span> <span class=n>m</span><span class=o>.</span><span class=n>group</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+                    <span class=n>log</span> <span class=o>=</span> <span class=n>re_ipv6</span>
+                <span class=k>else</span><span class=p>:</span>
+                    <span class=n>logging</span><span class=o>.</span><span class=n>warning</span><span class=p>(</span><span class=s1>&#39;Failed to match regex that previously matched!? Skipping this line!</span><span class=se>\n</span><span class=s1>&#39;</span>
+                                    <span class=s1>&#39;If you think the regex should have mathed the line, please share the log line below on https://discord.gg/HSPa4cz or Github: https://github.com/gilbN/geoip2influx</span><span class=se>\n</span><span class=s1>&#39;</span> 
+                                    <span class=n>f</span><span class=s1>&#39;Line: {line}&#39;</span>
+                                   <span class=p>)</span>
+                    <span class=k>continue</span>
+                <span class=n>ip_type</span> <span class=o>=</span> <span class=n>ipadd</span><span class=p>(</span><span class=n>ip</span><span class=p>)</span><span class=o>.</span><span class=n>iptype</span><span class=p>()</span>
+                <span class=k>if</span> <span class=n>ip_type</span> <span class=ow>in</span> <span class=n>monitored_ip_types</span> <span class=ow>and</span> <span class=n>ip</span><span class=p>:</span>
+                    <span class=n>info</span> <span class=o>=</span> <span class=n>gi</span><span class=o>.</span><span class=n>city</span><span class=p>(</span><span class=n>ip</span><span class=p>)</span>
+                    <span class=k>if</span> <span class=n>info</span><span class=p>:</span>
+                        <span class=n>geohash</span> <span class=o>=</span> <span class=n>encode</span><span class=p>(</span><span class=n>info</span><span class=o>.</span><span class=n>location</span><span class=o>.</span><span class=n>latitude</span><span class=p>,</span> <span class=n>info</span><span class=o>.</span><span class=n>location</span><span class=o>.</span><span class=n>longitude</span><span class=p>)</span>
+                        <span class=n>geohash_fields</span><span class=p>[</span><span class=s1>&#39;count&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=mi>1</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;geohash&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>geohash</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;ip&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>ip</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;host&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>hostname</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;country_code&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>info</span><span class=o>.</span><span class=n>country</span><span class=o>.</span><span class=n>iso_code</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;country_name&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>info</span><span class=o>.</span><span class=n>country</span><span class=o>.</span><span class=n>name</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;state&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>info</span><span class=o>.</span><span class=n>subdivisions</span><span class=o>.</span><span class=n>most_specific</span><span class=o>.</span><span class=n>name</span> <span class=k>if</span> <span class=n>info</span><span class=o>.</span><span class=n>subdivisions</span><span class=o>.</span><span class=n>most_specific</span><span class=o>.</span><span class=n>name</span> <span class=k>else</span> <span class=s2>&#34;-&#34;</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;state_code&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>info</span><span class=o>.</span><span class=n>subdivisions</span><span class=o>.</span><span class=n>most_specific</span><span class=o>.</span><span class=n>iso_code</span> <span class=k>if</span> <span class=n>info</span><span class=o>.</span><span class=n>subdivisions</span><span class=o>.</span><span class=n>most_specific</span><span class=o>.</span><span class=n>iso_code</span> <span class=k>else</span> <span class=s2>&#34;-&#34;</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;city&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>info</span><span class=o>.</span><span class=n>city</span><span class=o>.</span><span class=n>name</span> <span class=k>if</span> <span class=n>info</span><span class=o>.</span><span class=n>city</span><span class=o>.</span><span class=n>name</span> <span class=k>else</span> <span class=s2>&#34;-&#34;</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;postal_code&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>info</span><span class=o>.</span><span class=n>postal</span><span class=o>.</span><span class=n>code</span> <span class=k>if</span> <span class=n>info</span><span class=o>.</span><span class=n>postal</span><span class=o>.</span><span class=n>code</span> <span class=k>else</span> <span class=s2>&#34;-&#34;</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;latitude&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>info</span><span class=o>.</span><span class=n>location</span><span class=o>.</span><span class=n>latitude</span> <span class=k>if</span> <span class=n>info</span><span class=o>.</span><span class=n>location</span><span class=o>.</span><span class=n>latitude</span> <span class=k>else</span> <span class=s2>&#34;-&#34;</span>
+                        <span class=n>geohash_tags</span><span class=p>[</span><span class=s1>&#39;longitude&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>info</span><span class=o>.</span><span class=n>location</span><span class=o>.</span><span class=n>longitude</span> <span class=k>if</span> <span class=n>info</span><span class=o>.</span><span class=n>location</span><span class=o>.</span><span class=n>longitude</span> <span class=k>else</span> <span class=s2>&#34;-&#34;</span>
+                        <span class=n>ips</span><span class=p>[</span><span class=s1>&#39;tags&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>geohash_tags</span>
+                        <span class=n>ips</span><span class=p>[</span><span class=s1>&#39;fields&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>geohash_fields</span>
+                        <span class=n>ips</span><span class=p>[</span><span class=s1>&#39;measurement&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>geo_measurement</span>
+                        <span class=n>geo_metrics</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>ips</span><span class=p>)</span>
+                        <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;Geo metrics: {geo_metrics}&#39;</span><span class=p>)</span>
+                        <span class=k>try</span><span class=p>:</span>
+                            <span class=n>client</span><span class=o>.</span><span class=n>write_points</span><span class=p>(</span><span class=n>geo_metrics</span><span class=p>)</span>
+                        <span class=k>except</span> <span class=p>(</span><span class=n>InfluxDBServerError</span><span class=p>,</span> <span class=n>ConnectionError</span><span class=p>)</span> <span class=k>as</span> <span class=n>e</span><span class=p>:</span>
+                            <span class=n>logging</span><span class=o>.</span><span class=n>error</span><span class=p>(</span><span class=s1>&#39;Error writing data to InfluxDB! Check your database!</span><span class=se>\n</span><span class=s1>&#39;</span>
+                                          <span class=n>f</span><span class=s1>&#39;Error: {e}&#39;</span>
+                                         <span class=p>)</span>
+                <span class=k>else</span><span class=p>:</span>
+                    <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=n>f</span><span class=s2>&#34;Incorrect IP type: {ip_type}&#34;</span><span class=p>)</span>
+                <span class=k>if</span> <span class=n>send_logs</span><span class=p>:</span>
+                    <span class=n>data</span> <span class=o>=</span> <span class=n>search</span><span class=p>(</span><span class=n>log</span><span class=p>,</span> <span class=n>line</span><span class=p>)</span>
+                    <span class=k>if</span> <span class=n>ip_type</span> <span class=ow>in</span> <span class=n>monitored_ip_types</span> <span class=ow>and</span> <span class=n>ip</span><span class=p>:</span>
+                        <span class=n>info</span> <span class=o>=</span> <span class=n>gi</span><span class=o>.</span><span class=n>city</span><span class=p>(</span><span class=n>ip</span><span class=p>)</span>
+                        <span class=k>if</span> <span class=n>info</span><span class=p>:</span>
+                            <span class=n>datadict</span> <span class=o>=</span> <span class=n>data</span><span class=o>.</span><span class=n>groupdict</span><span class=p>()</span>
+                            <span class=n>log_data_fields</span><span class=p>[</span><span class=s1>&#39;count&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=mi>1</span>
+                            <span class=n>log_data_fields</span><span class=p>[</span><span class=s1>&#39;bytes_sent&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=nb>int</span><span class=p>(</span><span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;bytes_sent&#39;</span><span class=p>])</span>
+                            <span class=n>log_data_fields</span><span class=p>[</span><span class=s1>&#39;request_time&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=nb>float</span><span class=p>(</span><span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;request_time&#39;</span><span class=p>])</span>
+                            <span class=k>try</span><span class=p>:</span>
+                                <span class=n>log_data_fields</span><span class=p>[</span><span class=s1>&#39;connect_time&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=nb>float</span><span class=p>(</span><span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;connect_time&#39;</span><span class=p>])</span> <span class=k>if</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;connect_time&#39;</span><span class=p>]</span> <span class=o>!=</span> <span class=s1>&#39;-&#39;</span> <span class=k>else</span> <span class=mf>0.0</span>
+                            <span class=k>except</span> <span class=ne>ValueError</span><span class=p>:</span>
+                                <span class=n>log_data_fields</span><span class=p>[</span><span class=s1>&#39;connect_time&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=nb>str</span><span class=p>(</span><span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;connect_time&#39;</span><span class=p>])</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;ip&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;ipaddress&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;datetime&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datetime</span><span class=o>.</span><span class=n>strptime</span><span class=p>(</span><span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;dateandtime&#39;</span><span class=p>],</span> <span class=s1>&#39;</span><span class=si>%d</span><span class=s1>/%b/%Y:%H:%M:%S %z&#39;</span><span class=p>)</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;remote_user&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;remote_user&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;method&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;method&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;referrer&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;referrer&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;host&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;host&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;http_version&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;http_version&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;status_code&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;status_code&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;bytes_sent&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;bytes_sent&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;url&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;url&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;user_agent&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;user_agent&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;request_time&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;request_time&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;connect_time&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;connect_time&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;city&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;city&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;country_code&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>datadict</span><span class=p>[</span><span class=s1>&#39;country_code&#39;</span><span class=p>]</span>
+                            <span class=n>log_data_tags</span><span class=p>[</span><span class=s1>&#39;country_name&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>info</span><span class=o>.</span><span class=n>country</span><span class=o>.</span><span class=n>name</span>
+                            <span class=n>nginx_log</span><span class=p>[</span><span class=s1>&#39;tags&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>log_data_tags</span>
+                            <span class=n>nginx_log</span><span class=p>[</span><span class=s1>&#39;fields&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>log_data_fields</span>
+                            <span class=n>nginx_log</span><span class=p>[</span><span class=s1>&#39;measurement&#39;</span><span class=p>]</span> <span class=o>=</span> <span class=n>log_measurement</span>
+                            <span class=n>log_metrics</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=n>nginx_log</span><span class=p>)</span>
+                            <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=n>f</span><span class=s1>&#39;NGINX log metrics: {log_metrics}&#39;</span><span class=p>)</span>
+                            <span class=k>try</span><span class=p>:</span>
+                                <span class=n>client</span><span class=o>.</span><span class=n>write_points</span><span class=p>(</span><span class=n>log_metrics</span><span class=p>)</span>
+                            <span class=k>except</span> <span class=p>(</span><span class=n>InfluxDBServerError</span><span class=p>,</span> <span class=n>InfluxDBClientError</span><span class=p>,</span> <span class=n>ConnectionError</span><span class=p>)</span> <span class=k>as</span> <span class=n>e</span><span class=p>:</span>
+                                <span class=n>logging</span><span class=o>.</span><span class=n>error</span><span class=p>(</span><span class=s1>&#39;Error writing data to InfluxDB! Check your database!</span><span class=se>\n</span><span class=s1>&#39;</span>
+                                            <span class=n>f</span><span class=s1>&#39;Error: {e}&#39;</span>
+                                            <span class=p>)</span>
+
+
+<span class=k>def</span> <span class=nf>main</span><span class=p>():</span>
+    <span class=n>logging</span><span class=o>.</span><span class=n>info</span><span class=p>(</span><span class=s1>&#39;Starting geoip2influx..&#39;</span><span class=p>)</span>
+
+    <span class=n>logging</span><span class=o>.</span><span class=n>debug</span><span class=p>(</span><span class=s1>&#39;Variables set:&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> geoip_db_path             :: {geoip_db_path}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e LOG_PATH               :: {log_path}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e INFLUX_HOST            :: {influxdb_host}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e INFLUX_HOST_PORT       :: {influxdb_port}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e INFLUX_DATABASE        :: {influxdb_database}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e INFLUX_RETENTION       :: {influxdb_retention}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e INFLUX_SHARD           :: {influxdb_shard}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e INFLUX_USER            :: {influxdb_user}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e INFLUX_PASS            :: {influxdb_user_pass}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e GEO_MEASUREMENT        :: {geo_measurement}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e LOG_MEASUREMENT        :: {log_measurement}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e SEND_NGINX_LOGS        :: {send_nginx_logs}&#39;</span> <span class=o>+</span>
+    <span class=n>f</span><span class=s1>&#39;</span><span class=se>\n</span><span class=s1> -e GEOIP2INFLUX_LOG_LEVEL :: {log_level}&#39;</span> 
+    <span class=p>)</span>
+    <span class=c1># Parsing log file and sending metrics to Influxdb</span>
+    <span class=k>while</span> <span class=n>file_exists</span><span class=p>(</span><span class=n>log_path</span><span class=p>,</span><span class=n>geoip_db_path</span><span class=p>):</span>
+        <span class=c1># Get inode from log file</span>
+        <span class=n>inode</span> <span class=o>=</span> <span class=n>stat</span><span class=p>(</span><span class=n>log_path</span><span class=p>)</span><span class=o>.</span><span class=n>st_ino</span>
+        <span class=c1># Run main loop and grep a log file</span>
+        <span class=n>logparse</span><span class=p>(</span>
+            <span class=n>log_path</span><span class=p>,</span> <span class=n>influxdb_host</span><span class=p>,</span> <span class=n>influxdb_port</span><span class=p>,</span> <span class=n>influxdb_database</span><span class=p>,</span> <span class=n>influxdb_user</span><span class=p>,</span> <span class=n>influxdb_user_pass</span><span class=p>,</span>
+            <span class=n>influxdb_retention</span><span class=p>,</span> <span class=n>influxdb_shard</span><span class=p>,</span> <span class=n>geo_measurement</span><span class=p>,</span> <span class=n>log_measurement</span><span class=p>,</span> <span class=n>send_nginx_logs</span><span class=p>,</span> <span class=n>geoip_db_path</span><span class=p>,</span> <span class=n>inode</span><span class=p>)</span> <span class=c1># NOQA</span>
+
+<span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s1>&#39;__main__&#39;</span><span class=p>:</span>
+    <span class=k>try</span><span class=p>:</span>
+        <span class=n>main</span><span class=p>()</span>
+    <span class=k>except</span> <span class=ne>KeyboardInterrupt</span><span class=p>:</span>
+        <span class=nb>exit</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
+</code></pre></td></tr></table></div></div><p><code>requirements.txt</code>文件内容如下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>geoip2==3.0.0
+geohash2==1.1
+influxdb==5.3.0
+IPy==1.0
+</code></pre></td></tr></table></div></div><blockquote><p>以上来自：https://github.com/GilbN/geoip2influx/blob/master/geoip2influx.py</p></blockquote><p>运行脚本：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>pip install -r requirements.txt
+python3 geoip2influx.py
+</code></pre></td></tr></table></div></div><h3 id=检查生成的influxdb数据>检查生成的influxDB数据</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 打开influxdb的客户端cli工具</span>
+root@localhost:/usr/local/nginx/conf<span class=se>\#</span> influx
+Connected to http://localhost:8086 version 1.8.10
+InfluxDB shell version: 1.8.10
+&gt; show databases
+name: databases
+name
+----
+_internal
+telegraf
+geoip2influx
+&gt; use geoip2influx
+Using database geoip2influx
+&gt; show measurements
+name: measurements
+name
+----
+geoip2influx
+nginx_access_logs
+&gt; <span class=k>select</span> * from geoip2influx
+name: geoip2influx
+<span class=nb>time</span>                city          count country_code country_name         geohash      host           ip              latitude longitude postal_code state                        state_code
+----                ----          ----- ------------ ------------         -------      ----           --              -------- --------- ----------- -----                        ----------
+<span class=m>1650704346070671041</span> Central       <span class=m>1</span>     HK           Hong Kong            wecnv9ct6479 KeyFlawless-VM 103.149.249.71  22.2908  114.1501  -           Central and Western District HCW
+<span class=m>1650704349127071114</span> Central       <span class=m>1</span>     HK           Hong Kong            wecnv9ct6479 KeyFlawless-VM 103.149.249.71  22.2908  114.1501  -           Central and Western District HCW
+<span class=m>1650704349136628924</span> Central       <span class=m>1</span>     HK           Hong Kong            wecnv9ct6479 KeyFlawless-VM 103.149.249.71  22.2908  114.1501  -           Central and Western District HCW
+<span class=m>1650704350147606699</span> Central       <span class=m>1</span>     HK           Hong Kong            wecnv9ct6479 KeyFlawless-VM 103.149.249.71  22.2908  114.1501  -           Central and Western District HCW
+</code></pre></td></tr></table></div></div><h2 id=grafana中添加influxdb数据源>Grafana中添加influxDB数据源</h2><p>简单两步骤：</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424121739974.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424121739974.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424121739974.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424121739974.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424121739974.png title=image-20220424121739974></p><p>添加模板：</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424121822160.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424121822160.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424121822160.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424121822160.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424121822160.png title=image-20220424121822160></p><h2 id=最终结果>最终结果</h2><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424105850934.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424105850934.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424105850934.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424105850934.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20220424105850934.png title=image-20220424105850934></p><p>Done.</p><h2 id=参考链接>参考链接</h2><ul><li><a href=https://github.com/GilbN/geoip2influx>https://github.com/GilbN/geoip2influx</a></li><li><a href=https://github.com/leev/ngx_http_geoip2_module>https://github.com/leev/ngx_http_geoip2_module</a></li><li><a href=https://github.com/maxmind/libmaxminddb>https://github.com/maxmind/libmaxminddb</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2022-04-24</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://ictw.github.io/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/ data-title="NGINX LOGS & GEO MAP(Grafana)详细部署"><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://ictw.github.io/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Hacker News" data-sharer=hackernews data-url=https://ictw.github.io/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/ data-title="NGINX LOGS & GEO MAP(Grafana)详细部署"><i class="fab fa-hacker-news fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://ictw.github.io/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/ data-title="NGINX LOGS & GEO MAP(Grafana)详细部署"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://ictw.github.io/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/ data-title="NGINX LOGS & GEO MAP(Grafana)详细部署" data-ralateuid=AGou-ops><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=https://ictw.github.io/loveit/post/nginx-logs-geo-mapgrafana%E8%AF%A6%E7%BB%86%E9%83%A8%E7%BD%B2/ data-title="NGINX LOGS & GEO MAP(Grafana)详细部署"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/baidu.svg></i></a></span></div></div></div><div class=post-info-more><section class=post-tags></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/loveit/>主页</a></span></section></div><div class=post-nav><a href=/loveit/post/windows%E6%9C%8D%E5%8A%A1%E6%A3%80%E6%B5%8B%E4%B8%8E%E9%87%8D%E5%90%AFgolang/ class=prev rel=prev title=Windows服务检测与重启（Golang）><i class="fas fa-angle-left fa-fw"></i>Windows服务检测与重启（Golang）</a>
+<a href=/loveit/post/macos-%E7%BB%88%E7%AB%AF%E4%B8%8B%E5%85%89%E6%A0%87%E7%A7%BB%E5%8A%A8%E9%97%AE%E9%A2%98/ class=next rel=next title=MacOS偏门解决vim/Neovim光标跳转（j/k键）卡顿的问题。【使用karabiner】>MacOS偏门解决vim/Neovim光标跳转（j/k键）卡顿的问题。【使用karabiner】<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://agou-ops.github.io/-/ target=_blank rel="noopener noreferrer" style=color:red>【AGou-ops.cn】</a> 备份站点</div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.75.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2018 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/loveit/ target=_blank>AGou-ops</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp>鲁ICP备19050296号-2</span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/twemoji@13.0.0/dist/twemoji.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"AGou-ops/comments"}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"5M8VQRD7W9","algoliaIndex":"blog-2","algoliaSearchKey":"2fcdbd0ce638664e7a28cc64939603b9","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"twemoji":true};</script><script type=text/javascript src=/loveit/js/theme.min.js></script></body></html>

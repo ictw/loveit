@@ -1,0 +1,412 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>OpenVPN for CentOS - AGou's Blog-2</title><meta name=Description content="关于博主"><meta property="og:title" content="OpenVPN for CentOS"><meta property="og:description" content="OpenVPN 简介
+OpenVPN 是一个基于 OpenSSL 库的应用层 VPN 实现。和传统 VPN 相比，它的优点是简单易用。 [1]
+OpenVPN允许参与建立VPN的单点使用共享金钥，电子证书，或者用户名/密码来进行身份验证。它大量使用了OpenSSL加密库中的SSLv3/TLSv1 协议函式库。OpenVPN能在Solaris、Linux、OpenBSD、FreeBSD、NetBSD、Mac OS X与Windows 2000/XP/Vista上运行，并包含了许多安全性的功能。它并不是一个基于Web的VPN软件，也不与IPsec及其他VPN软件包兼容。"><meta property="og:type" content="article"><meta property="og:url" content="https://ictw.github.io/loveit/post/openvpn-for-centos/"><meta property="og:image" content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta property="article:published_time" content="2020-05-21T19:42:06+08:00"><meta property="article:modified_time" content="2020-05-21T19:42:06+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta name=twitter:title content="OpenVPN for CentOS"><meta name=twitter:description content="OpenVPN 简介
+OpenVPN 是一个基于 OpenSSL 库的应用层 VPN 实现。和传统 VPN 相比，它的优点是简单易用。 [1]
+OpenVPN允许参与建立VPN的单点使用共享金钥，电子证书，或者用户名/密码来进行身份验证。它大量使用了OpenSSL加密库中的SSLv3/TLSv1 协议函式库。OpenVPN能在Solaris、Linux、OpenBSD、FreeBSD、NetBSD、Mac OS X与Windows 2000/XP/Vista上运行，并包含了许多安全性的功能。它并不是一个基于Web的VPN软件，也不与IPsec及其他VPN软件包兼容。"><meta name=application-name content="AGou's Blog-2."><meta name=apple-mobile-web-app-title content="AGou's Blog-2."><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/myBlog-2/favicon.png><link rel=icon type=image/png sizes=32x32 href=/myBlog-2/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/myBlog-2/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ictw.github.io/loveit/post/openvpn-for-centos/><link rel=prev href=https://ictw.github.io/loveit/post/wireguard-vpn-for-ubuntu/><link rel=next href=https://ictw.github.io/loveit/post/scrcpy-android%E6%8A%95%E5%B1%8F%E7%A5%9E%E5%99%A8/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/loveit/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"OpenVPN for CentOS","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ictw.github.io\/loveit\/post\/openvpn-for-centos\/"},"image":["https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"],"genre":"posts","keywords":"OpenVPN, CentOS","wordcount":3324,"url":"https:\/\/ictw.github.io\/loveit\/post\/openvpn-for-centos\/","datePublished":"2020-05-21T19:42:06+08:00","dateModified":"2020-05-21T19:42:06+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"AGou-ops","logo":"https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"},"author":{"@type":"Person","name":"AGou-ops"},"description":""}</script></head><body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/myBlog-2/posts/>所有文章 </a><a class=menu-item href=/myBlog-2/tags/>标签 </a><a class=menu-item href=/myBlog-2/categories/>分类 </a><a class=menu-item href=/myBlog-2/anime/>Anime </a><a class=menu-item href=/myBlog-2/about/>关于 </a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value;"><option value=/loveit/post/openvpn-for-centos/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/myBlog-2/posts/>所有文章</a><a class=menu-item href=/myBlog-2/tags/>标签</a><a class=menu-item href=/myBlog-2/categories/>分类</a><a class=menu-item href=/myBlog-2/anime/>Anime</a><a class=menu-item href=/myBlog-2/about/>关于</a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value;"><option value=/loveit/post/openvpn-for-centos/ selected>简体中文</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">OpenVPN for CentOS</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/loveit/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>AGou-ops</a></span>&nbsp;<span class=post-category>收录于 <a href=/loveit/categories/vpn/><i class="far fa-folder fa-fw"></i>VPN</a>&nbsp;<a href=/loveit/categories/centos/><i class="far fa-folder fa-fw"></i>CentOS</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-05-21>2020-05-21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 3324 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#openvpn-简介>OpenVPN 简介</a></li><li><a href=#openvpn-安装>OpenVPN 安装</a><ul><li><a href=#使用easyrsa构建-ca>使用<code>EasyRSA</code>构建 CA</a></li><li><a href=#安装-openvpn-和-easyrsa>安装 OpenVPN 和 EasyRSA</a></li><li><a href=#创建diffie-hellman和hmac密钥>创建<code>Diffie-Hellman</code>和<code>HMAC</code>密钥</a></li><li><a href=#创建服务器证书和私钥>创建服务器证书和私钥</a></li><li><a href=#配置openvpn服务>配置<code>OpenVPN</code>服务</a></li><li><a href=#启动-openvpn-服务>启动 OpenVPN 服务</a></li></ul></li><li><a href=#配置客户端接口>配置客户端接口</a></li><li><a href=#创建客户端证书私钥和配置>创建客户端证书私钥和配置</a></li><li><a href=#使用-openvpn>使用 OpenVPN</a></li><li><a href=#快速安装-openvpn>快速安装 OpenVPN</a></li></ul></nav></div></div><div class=content id=content><h2 id=openvpn-简介>OpenVPN 简介</h2><p>OpenVPN 是一个基于 OpenSSL 库的应用层 VPN 实现。和传统 VPN 相比，它的优点是简单易用。 [1]</p><p>OpenVPN允许参与建立VPN的单点使用共享金钥，电子证书，或者用户名/密码来进行身份验证。它大量使用了OpenSSL加密库中的SSLv3/TLSv1 协议函式库。OpenVPN能在Solaris、Linux、OpenBSD、FreeBSD、NetBSD、Mac OS X与Windows 2000/XP/Vista上运行，并包含了许多安全性的功能。它并不是一个基于Web的VPN软件，也不与IPsec及其他VPN软件包兼容。</p><h2 id=openvpn-安装>OpenVPN 安装</h2><h3 id=使用easyrsa构建-ca>使用<code>EasyRSA</code>构建 CA</h3><ol><li>首先从项目<a href=https://github.com/OpenVPN/easy-rsa target=_blank rel="noopener noreffer">Github存储库</a>下载EasyRSA的最新版本并解压：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> <span class=o>&amp;&amp;</span> wget https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.5/EasyRSA-nix-3.0.7.tgz
+tar xzf EasyRSA-3.0.7.tgz
+</code></pre></td></tr></table></div></div><ol start=2><li>复制模板文件，并进行适当修改：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>mv EasyRSA-3.0.7 EasyRSA-CA<span class=p>;</span> <span class=nb>cd</span> EasyRSA-CA
+cp vars.example vars
+<span class=c1># ---------- 编辑 vars 文件内容`95`行左右 ----------</span>
+set_var EASYRSA_REQ_COUNTRY    <span class=s2>&#34;CN&#34;</span>
+set_var EASYRSA_REQ_PROVINCE   <span class=s2>&#34;Shandong&#34;</span>
+set_var EASYRSA_REQ_CITY       <span class=s2>&#34;Jinan&#34;</span>
+set_var EASYRSA_REQ_ORG        <span class=s2>&#34;AGou&#34;</span>
+set_var EASYRSA_REQ_EMAIL      <span class=s2>&#34;AGou-ops@foxmail.com&#34;</span>
+set_var EASYRSA_REQ_OU         <span class=s2>&#34;Community&#34;</span>
+</code></pre></td></tr></table></div></div><p>修改完成之后保存退出。</p><ol start=3><li>初始化<code>PKI</code>：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@test EasyRSA-CA<span class=o>]</span><span class=se>\#</span> ./easyrsa init-pki
+
+Note: using Easy-RSA configuration from: /root/EasyRSA-3.0.7/vars
+
+init-pki complete<span class=p>;</span> you may now create a CA or requests.
+Your newly created PKI dir is: /root/EasyRSA-3.0.7/pki
+</code></pre></td></tr></table></div></div><ol start=4><li>接下来建立<code>CA</code>：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@test EasyRSA-CA<span class=o>]</span><span class=se>\#</span> ./easyrsa build-ca nopass
+
+Note: using Easy-RSA configuration from: /root/EasyRSA-3.0.7/vars
+Using SSL: openssl OpenSSL 1.0.2k-fips  <span class=m>26</span> Jan <span class=m>2017</span>
+Generating RSA private key, <span class=m>2048</span> bit long modulus
+...............+++
+............................................................................................................................+++
+e is <span class=m>65537</span> <span class=o>(</span>0x10001<span class=o>)</span>
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter <span class=s1>&#39;.&#39;</span>, the field will be left blank.
+-----
+Common Name <span class=o>(</span>eg: your user, host, or server name<span class=o>)</span> <span class=o>[</span>Easy-RSA CA<span class=o>]</span>:
+
+CA creation <span class=nb>complete</span> and you may now import and sign cert requests.
+Your new CA certificate file <span class=k>for</span> publishing is at:
+/root/EasyRSA-3.0.7/pki/ca.crt
+</code></pre></td></tr></table></div></div><p>完成后，该脚本将创建两个文件-CA公共证书<code>PKI/ca.crt</code>和CA私钥<code>PKI/private/ca.key</code></p><h3 id=安装-openvpn-和-easyrsa>安装 OpenVPN 和 EasyRSA</h3><ol><li>可以在 OpenVPN 的官方 github 仓库 下载最新源码包进行编译安装，在这里为了方便，我使用<code>epel</code>仓库进行安装：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>yum install epel-release -y
+yum install openvpn -y
+</code></pre></td></tr></table></div></div><ol start=2><li>获取最新版本的<code>EasyRSA</code>：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> <span class=o>&amp;&amp;</span> wget https://github.com/OpenVPN/easy-rsa/releases/download/v3.0.5/EasyRSA-nix-3.0.7.tgz
+tar xzf EasyRSA-3.0.7.tgz
+mv EasyRSA-3.0.7 EasyRSA-Sever1
+<span class=nb>cd</span> EasyRSA-Sever1
+</code></pre></td></tr></table></div></div><ol start=3><li>尽管我们已经在 CA 主机上初始化了PKI，但是我们还需要在 <code>OpenVPN 服务器</code>上创建一个新的 PKI ：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@test EasyRSA-Server1<span class=o>]</span><span class=se>\#</span> ./easyrsa init-pki
+
+Note: using Easy-RSA configuration from: /root/EasyRSA-Server1/vars
+
+init-pki complete<span class=p>;</span> you may now create a CA or requests.
+Your newly created PKI dir is: /root/EasyRSA-Server1/pki
+</code></pre></td></tr></table></div></div><h3 id=创建diffie-hellman和hmac密钥>创建<code>Diffie-Hellman</code>和<code>HMAC</code>密钥</h3><p>生成一个<code>Diffie-Hellman</code>密钥，该密钥将在密钥交换期间使用，并使用<code>HMAC</code>签名文件为连接添加附加的安全层。</p><ol><li>在<code>OpenVPN</code>服务器上，生成<code>Diffie-Hellman</code>密钥：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> ~/EasyRSA-Server1
+./easyrsa gen-dh
+</code></pre></td></tr></table></div></div><ol start=2><li>复制该文件到<code>/etc/openvpn</code>目录中去：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp /root/EasyRSA-Server1/pki/dh.pem /etc/openvpn
+</code></pre></td></tr></table></div></div><ol start=3><li>接下来，使用<code>openvpn</code>二进制文件生成<code>HMAC</code>签名：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>openvpn --genkey --secret ta.key
+</code></pre></td></tr></table></div></div><p>然后将生成的<code>ta.key</code>复制到<code>/etc/openvpn</code>目录中去：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp ta.key /etc/openvpn
+</code></pre></td></tr></table></div></div><h3 id=创建服务器证书和私钥>创建服务器证书和私钥</h3><ol><li>进入<code>OpenVPN服务器</code>上的EasyRSA目录，并为服务器和证书请求文件生成一个新的私钥：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> ~/EasyRSA-Server1
+./easyrsa gen-req server1 nopass
+</code></pre></td></tr></table></div></div><p>该命令将创建两个文件，一个私钥（<code>server1.key</code>）和一个证书请求文件（<code>server1.req</code>）</p><ol start=2><li>将生成的私钥复制到<code>/etc/openvpn</code>目录：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp /root/EasyRSA-Server1/pki/private/server1.key /etc/openvpn/
+</code></pre></td></tr></table></div></div><ol start=3><li>将证书请求发送到<code>CA</code>主机（这里我CA主机与OpenVPN为同一主机）：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp ~/EasyRSA-Server1/pki/reqs/server1.req /tmp
+</code></pre></td></tr></table></div></div><ol start=4><li>登录<code>CA主机</code>，切换到 EasyRSA 目录并导入证书请求文件：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> ~/EasyRSA-CA
+./easyrsa import-req /tmp/server1.req server1
+</code></pre></td></tr></table></div></div><p>此命令只是将请求文件复制到<code>pki/reqs</code>目录中。</p><ol start=5><li>在<code>CA主机</code>上，签署证书：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>./easyrsa sign-req server server1
+</code></pre></td></tr></table></div></div><p>确认信息无误之后，输入 yes 然后点击回车即可。</p><ol start=6><li>在<code>CA主机</code>上，将签名的证书<code>server1.crt</code>和<code>ca.crt</code>文件传发送回<code>OpenVPN主机</code>：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp ~/EasyRSA-CA/pki/issued/server1.crt /etc/openvpn/
+cp ~/EasyRSA-CA/pki/ca.crt /etc/openvpn/
+</code></pre></td></tr></table></div></div><p>:warning: 这里需要注意的是：我的<code>CA主机</code>和<code>OpenVPN</code>主机是同一主机，所以上面的<code>/etc/openvpn</code>目录是<code>OpenVPN主机</code>的。</p><p>所有步骤都完成之后，在<code>/etc/openvpn</code>目录下应当有这些文件存在：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@test EasyRSA-CA<span class=o>]</span><span class=se>\#</span> ls /etc/openvpn/
+ca.crt  client  dh.pem  server  server1.crt  server1.key  ta.key
+</code></pre></td></tr></table></div></div><h3 id=配置openvpn服务>配置<code>OpenVPN</code>服务</h3><ol><li>将 OpenVPN 的模板配置文件复制到<code>/etc/openvpn</code>：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp /usr/share/doc/openvpn-2.4.9/sample/sample-config-files/server.conf /etc/openvpn/server1.conf
+</code></pre></td></tr></table></div></div><ol start=2><li>修改<code>server1.conf</code>，找到证书，密钥和DH参数指令并更改文件名：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>user nobody
+group nogroup
+<span class=c1># ---------- 大约在78行左右 ----------</span>
+cert server1.crt
+key server1.key 
+
+dh dh.pem
+
+<span class=c1># 在文件末尾添加以下行。该指令会将消息身份验证算法（HMAC）从SHA1更改为SHA256</span>
+auth SHA256
+</code></pre></td></tr></table></div></div><p>:information_source:可选： 要通过VPN重定向客户端流量，请找到并取消注释<code>redirect-gateway</code>和<code>dhcp-option</code>选项：</p><p><code>/etc/openvpn/server1.conf</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-cfg data-lang=cfg><span class=na>push &#34;redirect-gateway def1 bypass-dhcp&#34;</span>
+
+<span class=na>push &#34;dhcp-option DNS 208.67.222.222&#34;</span>
+<span class=na>push &#34;dhcp-option DNS 208.67.220.220&#34;</span>
+</code></pre></td></tr></table></div></div><p>默认情况下，使用OpenDNS解析器。您可以更改它并使用CloudFlare，Google或您想要的任何其他DNS解析器。</p><p>完整配置文件参考：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>port 1194
+proto udp
+dev tun
+ca ca.crt
+cert server1.crt
+key server1.key  # This file should be kept secret
+dh dh.pem
+server 10.8.0.0 255.255.255.0
+ifconfig-pool-persist ipp.txt
+push &#34;redirect-gateway def1 bypass-dhcp&#34;
+push &#34;dhcp-option DNS 208.67.222.222&#34;
+push &#34;dhcp-option DNS 208.67.220.220&#34;
+keepalive 10 120
+tls-auth ta.key 0 # This file is secret
+cipher AES-256-CBC
+user nobody
+group nobody
+persist-key
+persist-tun
+status openvpn-status.log
+verb 3
+explicit-exit-notify 1
+auth SHA256
+</code></pre></td></tr></table></div></div><h3 id=启动-openvpn-服务>启动 OpenVPN 服务</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>systemctl start openvpn@server1
+</code></pre></td></tr></table></div></div><p>成功启动之后，OpenVPN Server 会创建一个 tun 设备，即<code>tun0</code>：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@test openvpn<span class=o>]</span><span class=se>\#</span> ip a show tun0
+3: tun0: &lt;POINTOPOINT,MULTICAST,NOARP,UP,LOWER_UP&gt; mtu <span class=m>1500</span> qdisc pfifo_fast state UNKNOWN group default qlen <span class=m>100</span>
+    link/none 
+    inet 10.8.0.1 peer 10.8.0.2/32 scope global tun0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::afaa:c6f7:7ae8:3a76/64 scope link flags <span class=m>800</span> 
+       valid_lft forever preferred_lft forever
+</code></pre></td></tr></table></div></div><p>为了正确转发网络数据包，我们需要启用IP转发：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>echo</span> <span class=s2>&#34;net.ipv4.ip_forward = 1&#34;</span> &gt;&gt; /etc/sysctl.conf
+sysctl -p
+</code></pre></td></tr></table></div></div><h2 id=配置客户端接口>配置客户端接口</h2><p>创建一个单独的SSL证书，并为每个VPN客户端生成一个不同的配置文件。</p><p>客户端私钥和证书请求可以在客户端计算机或服务器上生成。为简单起见，我们将在服务器上生成证书请求，然后将其发送到CA进行签名。</p><p>生成客户端证书和配置文件的整个过程如下：</p><ol><li><p>在OpenVPN服务器上生成私钥和证书请求；</p></li><li><p>将请求发送到要签名的CA计算机；</p></li><li><p>将签名的SSL证书复制到OpenVPN服务器并生成配置文件；</p></li><li><p>将配置文件发送到VPN客户端的计算机。</p></li><li><p>首先，在<code>OpenVPN主机</code>上创建一组目录来存放客户端文件：</p></li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>mkdir -p ~/openvpn-clients/<span class=o>{</span>configs,base,files<span class=o>}</span>
+</code></pre></td></tr></table></div></div><ul><li><code>base</code> 目录将存储将在所有客户端文件之间共享的基本文件和配置；</li><li><code>configs</code> 目录将存储生成的客户端配置；</li><li><code>files</code> 目录将存储特定于客户端的证书/密钥对。</li></ul><ol start=2><li>复制<code>ca.crt</code>和<code>ta.key</code>文件到<code>~/openvpn-clients/base</code>目录：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp ~/EasyRSA-Server1/ta.key ~/openvpn-clients/base/
+cp /etc/openvpn/ca.crt ~/openvpn-clients/base/
+</code></pre></td></tr></table></div></div><ol start=3><li>将示例客户端配置文件复制到<code>~/openvpn-clients/base/</code>目录下：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp /usr/share/doc/openvpn-2.4.9/sample/sample-config-files/client.conf ~/openvpn-clients/base/
+</code></pre></td></tr></table></div></div><ol start=4><li>编辑<code>client.conf</code>文件以匹配我们的服务器配置：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>remote 172.16.1.131 <span class=m>1194</span>
+<span class=c1># 在文件结尾添加以下内容</span>
+auth SHA256
+key-direction <span class=m>1</span>
+</code></pre></td></tr></table></div></div><p>完整配置文件参考如下所示：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>client
+dev tun
+proto udp
+remote 172.16.1.131 1194
+resolv-retry infinite
+nobind
+persist-key
+persist-tun
+remote-cert-tls server
+cipher AES-256-CBC
+verb 3
+auth SHA256
+key-direction 1
+</code></pre></td></tr></table></div></div><ol start=5><li>接下来，创建一个简单的bash脚本，它将基本配置和文件与客户端证书和密钥合并，并将生成的配置存储在<code>~/openvpn-clients/configs</code>目录中：</li></ol><p><code>vim ~/openvpn-clients/gen_config.sh</code></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=cp>#!/bin/bash
+</span><span class=cp></span>
+<span class=nv>FILES_DIR</span><span class=o>=</span><span class=nv>$HOME</span>/openvpn-clients/files
+<span class=nv>BASE_DIR</span><span class=o>=</span><span class=nv>$HOME</span>/openvpn-clients/base
+<span class=nv>CONFIGS_DIR</span><span class=o>=</span><span class=nv>$HOME</span>/openvpn-clients/configs
+
+<span class=nv>BASE_CONF</span><span class=o>=</span><span class=si>${</span><span class=nv>BASE_DIR</span><span class=si>}</span>/client.conf
+<span class=nv>CA_FILE</span><span class=o>=</span><span class=si>${</span><span class=nv>BASE_DIR</span><span class=si>}</span>/ca.crt
+<span class=nv>TA_FILE</span><span class=o>=</span><span class=si>${</span><span class=nv>BASE_DIR</span><span class=si>}</span>/ta.key
+
+<span class=nv>CLIENT_CERT</span><span class=o>=</span><span class=si>${</span><span class=nv>FILES_DIR</span><span class=si>}</span>/<span class=si>${</span><span class=nv>1</span><span class=si>}</span>.crt
+<span class=nv>CLIENT_KEY</span><span class=o>=</span><span class=si>${</span><span class=nv>FILES_DIR</span><span class=si>}</span>/<span class=si>${</span><span class=nv>1</span><span class=si>}</span>.key
+
+<span class=c1># Test for files</span>
+<span class=k>for</span> i in <span class=s2>&#34;</span><span class=nv>$BASE_CONF</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$CA_FILE</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$TA_FILE</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$CLIENT_CERT</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$CLIENT_KEY</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=nv>$i</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+        <span class=nb>echo</span> <span class=s2>&#34; The file </span><span class=nv>$i</span><span class=s2> does not exist&#34;</span>
+        <span class=nb>exit</span> <span class=m>1</span>
+    <span class=k>fi</span>
+
+    <span class=k>if</span> <span class=o>[[</span> ! -r <span class=nv>$i</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+        <span class=nb>echo</span> <span class=s2>&#34; The file </span><span class=nv>$i</span><span class=s2> is not readable.&#34;</span>
+        <span class=nb>exit</span> <span class=m>1</span>
+    <span class=k>fi</span>
+<span class=k>done</span>
+
+<span class=c1># Generate client config</span>
+cat &gt; <span class=si>${</span><span class=nv>CONFIGS_DIR</span><span class=si>}</span>/<span class=si>${</span><span class=nv>1</span><span class=si>}</span>.ovpn <span class=s>&lt;&lt;EOF
+</span><span class=s>$(cat ${BASE_CONF})
+</span><span class=s>&lt;key&gt;
+</span><span class=s>$(cat ${CLIENT_KEY})
+</span><span class=s>&lt;/key&gt;
+</span><span class=s>&lt;cert&gt;
+</span><span class=s>$(cat ${CLIENT_CERT})
+</span><span class=s>&lt;/cert&gt;
+</span><span class=s>&lt;ca&gt;
+</span><span class=s>$(cat ${CA_FILE})
+</span><span class=s>&lt;/ca&gt;
+</span><span class=s>&lt;tls-auth&gt;
+</span><span class=s>$(cat ${TA_FILE})
+</span><span class=s>&lt;/tls-auth&gt;
+</span><span class=s>EOF</span>
+</code></pre></td></tr></table></div></div><p>赋予执行权限：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>chmod +x ~/openvpn-clients/gen_config.sh
+</code></pre></td></tr></table></div></div><h2 id=创建客户端证书私钥和配置>创建客户端证书私钥和配置</h2><p>生成客户端私钥和证书请求的过程与生成服务器密钥和证书请求的过程相同。</p><ol><li>登录<code>OpenVPN主机</code>为客户端生成一个新的私钥和一个证书请求：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> ~/EasyRSA-Server1
+./easyrsa gen-req client1 nopass
+</code></pre></td></tr></table></div></div><ol start=2><li>将私钥<code>client1.key</code>复制到<code>~/openvpn-clients/files</code>中：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp ~/EasyRSA-Server1/pki/private/client1.key ~/openvpn-clients/files/
+</code></pre></td></tr></table></div></div><ol start=3><li>将证书请求文件传输到<code>CA主机</code>：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp ~/EasyRSA-Server1/pki/reqs/client1.req /tmp
+</code></pre></td></tr></table></div></div><ol start=4><li>进入<code>CA主机</code>，导入证书请求并进行签署：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> ~/EasyRSA-CA
+./easyrsa import-req /tmp/client1.req client1
+./easyrsa sign-req client client1
+</code></pre></td></tr></table></div></div><ol start=5><li>接下来，将签好名的证书<code>client1.crt</code>文件发送回<code>OpenVPN主机</code>：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>cp ~/EasyRSA-CA/pki/issued/client1.crt ~/openvpn-clients/files
+</code></pre></td></tr></table></div></div><ol start=6><li>最后一步是使用<code>gen_config.sh</code>脚本生成客户端配置，切换到<code>~/openvpn-clients</code>目录并使用客户端名称作为参数运行脚本：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nb>cd</span> ~/openvpn-clients
+./gen_config.sh client1
+</code></pre></td></tr></table></div></div><p>该脚本将在<code>~/client-configs/configs</code>目录中创建一个名为<code>client1.ovpn</code>的文件：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@test openvpn-clients<span class=o>]</span><span class=se>\#</span> ls ~/openvpn-clients/configs
+client1.ovpn
+</code></pre></td></tr></table></div></div><p>此时，客户端配置已创建，可以直接将配置文件传输到要用作客户端的设备上。</p><p>如果想要添加其他的客户端，重复这些步骤即可。</p><h2 id=使用-openvpn>使用 OpenVPN</h2><p>在<code>Debian</code>系系统下：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>sudo apt update -y <span class=o>&amp;&amp;</span> sudo apt instal openvpn
+</code></pre></td></tr></table></div></div><p>安装完软件包之后，使用以下命令连接到<code>OpenVPN</code>服务器：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>sudo openvpn --config client1.ovpn
+</code></pre></td></tr></table></div></div><h2 id=快速安装-openvpn>快速安装 OpenVPN</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>sudo apt update -y
+sudo apt install -y openvpn
+</code></pre></td></tr></table></div></div><p>从 github 获取一键安装脚本:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>git clone https://github.com/angristan/openvpn-install.git
+<span class=nb>cd</span> openvpn-install
+</code></pre></td></tr></table></div></div><p>赋予脚本可执行权限:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>chmod +x openvpn-install
+</code></pre></td></tr></table></div></div><p>执行脚本:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=nv>AUTO_INSTALL</span><span class=o>=</span>y ./openvpn-install.sh
+</code></pre></td></tr></table></div></div><p>:warning: 注意: 在客户端使用 OpenVPN 时, 要确保服务器端的 OpenVPN 监听的端口处于放行状态.</p><p>Linux 客户端使用:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>sudo apt install network-manager-openvpn
+</code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>sudo openvpn ./client.ovpn
+</code></pre></td></tr></table></div></div><p>Windows 客户端使用:</p><p>直接去<a href=https://openvpn.net/community-downloads/ target=_blank rel="noopener noreffer"> OpenVPN 官方下载站点</a>下载然后导入客户端配置文件 <code>client.ovpn</code>, 然后启动服务即可.</p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-05-21</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/loveit/post/openvpn-for-centos/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://ictw.github.io/loveit/post/openvpn-for-centos/ data-title="OpenVPN for CentOS" data-hashtags=OpenVPN,CentOS><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://ictw.github.io/loveit/post/openvpn-for-centos/ data-hashtag=OpenVPN><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Hacker News" data-sharer=hackernews data-url=https://ictw.github.io/loveit/post/openvpn-for-centos/ data-title="OpenVPN for CentOS"><i class="fab fa-hacker-news fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://ictw.github.io/loveit/post/openvpn-for-centos/ data-title="OpenVPN for CentOS"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://ictw.github.io/loveit/post/openvpn-for-centos/ data-title="OpenVPN for CentOS" data-ralateuid=AGou-ops><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=https://ictw.github.io/loveit/post/openvpn-for-centos/ data-title="OpenVPN for CentOS"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/baidu.svg></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/loveit/tags/openvpn/>OpenVPN</a>,&nbsp;<a href=/loveit/tags/centos/>CentOS</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/loveit/>主页</a></span></section></div><div class=post-nav><a href=/loveit/post/wireguard-vpn-for-ubuntu/ class=prev rel=prev title="WireGuard VPN for Ubuntu"><i class="fas fa-angle-left fa-fw"></i>WireGuard VPN for Ubuntu</a>
+<a href=/loveit/post/scrcpy-android%E6%8A%95%E5%B1%8F%E7%A5%9E%E5%99%A8/ class=next rel=next title="Scrcpy Android投屏神器">Scrcpy Android投屏神器<i class="fas fa-angle-right fa-fw"></i></a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://agou-ops.github.io/-/ target=_blank rel="noopener noreferrer" style=color:red>【AGou-ops.cn】</a> 备份站点</div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.75.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2018 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/loveit/ target=_blank>AGou-ops</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp>鲁ICP备19050296号-2</span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/twemoji@13.0.0/dist/twemoji.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"5M8VQRD7W9","algoliaIndex":"blog-2","algoliaSearchKey":"2fcdbd0ce638664e7a28cc64939603b9","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"twemoji":true};</script><script type=text/javascript src=/loveit/js/theme.min.js></script></body></html>

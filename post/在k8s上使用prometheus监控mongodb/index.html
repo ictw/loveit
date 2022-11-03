@@ -1,0 +1,244 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>在k8s上使用Prometheus监控MongoDB - AGou's Blog-2</title><meta name=Description content="关于博主"><meta property="og:title" content="在k8s上使用Prometheus监控MongoDB"><meta property="og:description" content="预先准备
+
+minikube For Windows(资源充足, 有集群更好不过);
+Helm;
+科学上网能力."><meta property="og:type" content="article"><meta property="og:url" content="https://ictw.github.io/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/"><meta property="og:image" content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta property="article:published_time" content="2020-10-08T14:04:30+08:00"><meta property="article:modified_time" content="2020-10-08T14:04:30+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta name=twitter:title content="在k8s上使用Prometheus监控MongoDB"><meta name=twitter:description content="预先准备
+
+minikube For Windows(资源充足, 有集群更好不过);
+Helm;
+科学上网能力."><meta name=application-name content="AGou's Blog-2."><meta name=apple-mobile-web-app-title content="AGou's Blog-2."><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/myBlog-2/favicon.png><link rel=icon type=image/png sizes=32x32 href=/myBlog-2/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/myBlog-2/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ictw.github.io/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/><link rel=prev href=https://ictw.github.io/loveit/post/%E8%87%AA%E5%AE%9A%E4%B9%89shortcode/><link rel=next href=https://ictw.github.io/loveit/post/devops-notes/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/loveit/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"在k8s上使用Prometheus监控MongoDB","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ictw.github.io\/loveit\/post\/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb\/"},"image":["https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"],"genre":"posts","keywords":"k8s, prometheus, mongodb, grafana","wordcount":1436,"url":"https:\/\/ictw.github.io\/loveit\/post\/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb\/","datePublished":"2020-10-08T14:04:30+08:00","dateModified":"2020-10-08T14:04:30+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"AGou-ops","logo":"https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"},"author":{"@type":"Person","name":"AGou-ops"},"description":""}</script></head><body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/myBlog-2/posts/>所有文章 </a><a class=menu-item href=/myBlog-2/tags/>标签 </a><a class=menu-item href=/myBlog-2/categories/>分类 </a><a class=menu-item href=/myBlog-2/anime/>Anime </a><a class=menu-item href=/myBlog-2/about/>关于 </a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value;"><option value=/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/myBlog-2/posts/>所有文章</a><a class=menu-item href=/myBlog-2/tags/>标签</a><a class=menu-item href=/myBlog-2/categories/>分类</a><a class=menu-item href=/myBlog-2/anime/>Anime</a><a class=menu-item href=/myBlog-2/about/>关于</a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value;"><option value=/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/ selected>简体中文</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">在k8s上使用Prometheus监控MongoDB</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/loveit/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>AGou-ops</a></span>&nbsp;<span class=post-category>收录于 <a href=/loveit/categories/kubernetes/><i class="far fa-folder fa-fw"></i>kubernetes</a>&nbsp;<a href=/loveit/categories/prometheus/><i class="far fa-folder fa-fw"></i>prometheus</a>&nbsp;<a href=/loveit/categories/database/><i class="far fa-folder fa-fw"></i>database</a>&nbsp;<a href=/loveit/categories/grafana/><i class="far fa-folder fa-fw"></i>grafana</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-10-08>2020-10-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1436 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#预先准备>预先准备</a></li><li><a href=#整体框架>整体框架</a></li><li><a href=#操作步骤>操作步骤</a><ul><li><a href=#启用helm-tillerhelm服务器端>启用<code>helm-tiller</code>(helm服务器端)</a></li><li><a href=#安装prometheus-operator>安装<code>Prometheus-operator</code></a></li><li><a href=#部署mongodb及其服务>部署<code>MongoDB</code>及其服务</a></li><li><a href=#部署mongodb-exporter>部署<code>MongoDB Exporter</code></a></li><li><a href=#在grafana查看>在<code>Grafana</code>查看</a></li></ul></li><li><a href=#附录1-chart-地址>附录1: chart 地址</a></li><li><a href=#附录2-kubectl-get-all>附录2: kubectl get all</a></li></ul></nav></div></div><div class=content id=content><h2 id=预先准备>预先准备</h2><ul><li>minikube For Windows(资源充足, 有集群更好不过);</li><li>Helm;</li><li>科学上网能力.</li></ul><h2 id=整体框架>整体框架</h2><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/arch.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/arch.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/arch.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/arch.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/arch.png title=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/arch.png></p><p><del>随手在线画的, 不美观, qwq.</del></p><h2 id=操作步骤>操作步骤</h2><h3 id=启用helm-tillerhelm服务器端>启用<code>helm-tiller</code>(helm服务器端)</h3><p>在<code>minikube</code>中启用<code>helm-tiller</code>插件, 很简单, 只需要一条命令即可:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ minikube addons <span class=nb>enable</span> helm-tiller
+<span class=c1># 或者在启动 minikube 的时候直接启用 helm-tiller</span>
+$ minikube start --addons<span class=o>=[</span><span class=s2>&#34;helm-tiller&#34;</span><span class=o>]</span> &lt;Other_Options&gt;
+</code></pre></td></tr></table></div></div><h3 id=安装prometheus-operator>安装<code>Prometheus-operator</code></h3><p>首先添加所需仓库:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+<span class=c1># 更新仓库内容</span>
+$ helm repo update
+</code></pre></td></tr></table></div></div><p>安装/下载<code>chart</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ helm install prometheus-community/kube-prometheus-stack --version 9.4.10
+
+<span class=c1># 或者先下载下来更改所需内容之后再进行安装(推荐使用方法)</span>
+$ helm pull prometheus-community/kube-prometheus-stack --version 9.4.10 --untar
+<span class=c1># 安装</span>
+$ helm install prometheus kube-prometheus-stack/
+</code></pre></td></tr></table></div></div><p>安装完成之后, <code>kubernetes</code>会自动接管后续工作, 如拉取镜像等:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 观察部署进度</span>
+$ kubectl get po -w
+NAME                                                     READY   STATUS    RESTARTS   AGE
+alertmanager-prometheus-kube-prometheus-alertmanager-0   2/2     Running   <span class=m>0</span>          24m
+prometheus-grafana-79b677fd4b-t9kr9                      2/2     Running   <span class=m>0</span>          25m
+prometheus-kube-prometheus-operator-69cd74c99f-wltf4     2/2     Running   <span class=m>0</span>          25m
+prometheus-kube-state-metrics-95d956569-mlfwv            1/1     Running   <span class=m>0</span>          25m
+prometheus-prometheus-kube-prometheus-prometheus-0       3/3     Running   <span class=m>1</span>          24m
+prometheus-prometheus-node-exporter-tvwf5                1/1     Running   <span class=m>0</span>          25m
+<span class=c1># 查看service</span>
+$ kubectl get svc
+NAME                                      TYPE        CLUSTER-IP      EXTERNAL-IP   PORT<span class=o>(</span>S<span class=o>)</span>                      AGE
+alertmanager-operated                     ClusterIP   None            &lt;none&gt;        9093/TCP,9094/TCP,9094/UDP   25m
+kubernetes                                ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP                      44h
+prometheus-grafana                        ClusterIP   10.108.199.68   &lt;none&gt;        80/TCP                       26m
+prometheus-kube-prometheus-alertmanager   ClusterIP   10.96.81.7      &lt;none&gt;        9093/TCP                     26m
+prometheus-kube-prometheus-operator       ClusterIP   10.109.9.111    &lt;none&gt;        8080/TCP,443/TCP             26m
+prometheus-kube-prometheus-prometheus     ClusterIP   10.98.173.241   &lt;none&gt;        9090/TCP                     26m
+prometheus-kube-state-metrics             ClusterIP   10.109.121.40   &lt;none&gt;        8080/TCP                     26m
+prometheus-operated                       ClusterIP   None            &lt;none&gt;        9090/TCP                     25m
+prometheus-prometheus-node-exporter       ClusterIP   10.107.29.93    &lt;none&gt;        9100/TCP                     26m
+</code></pre></td></tr></table></div></div><p>以上信息无误则表明<code>prometheus</code>已成功部署.</p><p>使用<code>minikube</code>(<code>kubectl</code>亦可)的转发功能, 将<code>svc/prometheus-kube-prometheus-prometheus </code>的端口映射到本地:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ minikube port-forward svc/prometheus-kube-prometheus-prometheus <span class=m>9090</span>
+Forwarding from 127.0.0.1:9090 -&gt; <span class=m>9090</span>
+Forwarding from <span class=o>[</span>::1<span class=o>]</span>:9090 -&gt; <span class=m>9090</span>
+Handling connection <span class=k>for</span> <span class=m>9090</span>
+</code></pre></td></tr></table></div></div><p>打开浏览器访问<code>http://127.0.0.1:9090/</code>查看<code>prometheus UI</code>:</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/prometheus%20ui.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/prometheus%20ui.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/prometheus%20ui.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/prometheus%20ui.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/prometheus%20ui.png title=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/prometheus%20ui.png></p><p>使用以下命令查看<code>prometheus</code>的<code>servicemonitor</code>(其对应<code>prometheus UI</code>中的<code>target</code>):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ kubectl get servicemonitor
+NAME                                                 AGE
+prometheus-kube-prometheus-alertmanager              36m
+prometheus-kube-prometheus-apiserver                 36m
+prometheus-kube-prometheus-coredns                   36m
+prometheus-kube-prometheus-grafana                   36m
+prometheus-kube-prometheus-kube-controller-manager   36m
+prometheus-kube-prometheus-kube-etcd                 36m
+prometheus-kube-prometheus-kube-proxy                36m
+prometheus-kube-prometheus-kube-scheduler            36m
+prometheus-kube-prometheus-kube-state-metrics        36m
+prometheus-kube-prometheus-kubelet                   36m
+prometheus-kube-prometheus-node-exporter             36m
+prometheus-kube-prometheus-operator                  36m
+prometheus-kube-prometheus-prometheus                36m
+</code></pre></td></tr></table></div></div><p>查看所有<code>crd</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ kubectl get crd
+NAME                                    CREATED AT
+alertmanagers.monitoring.coreos.com     2020-10-08T01:10:04Z
+podmonitors.monitoring.coreos.com       2020-10-08T01:10:04Z
+prometheuses.monitoring.coreos.com      2020-10-08T01:10:04Z
+prometheusrules.monitoring.coreos.com   2020-10-08T01:10:04Z
+servicemonitors.monitoring.coreos.com   2020-10-08T01:10:04Z
+thanosrulers.monitoring.coreos.com      2020-10-08T01:10:04Z
+</code></pre></td></tr></table></div></div><p><strong>通过<code>describe</code>子命令可以发现<code>crd</code>的<code>matchLabels</code>都包含<code>release: prometheus</code>标签.</strong></p><h3 id=部署mongodb及其服务>部署<code>MongoDB</code>及其服务</h3><p>参考<code>MongoDB-depl-svc.yaml</code>文件内容如下:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>apps/v1</span><span class=w>
+</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Deployment</span><span class=w>
+</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>mongodb-deployment</span><span class=w>
+</span><span class=w>  </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>mongodb</span><span class=w>
+</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>replicas</span><span class=p>:</span><span class=w> </span><span class=m>2</span><span class=w>
+</span><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>matchLabels</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>mongodb</span><span class=w>
+</span><span class=w>  </span><span class=nt>template</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>labels</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>mongodb</span><span class=w>
+</span><span class=w>    </span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span><span class=nt>containers</span><span class=p>:</span><span class=w>
+</span><span class=w>      </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>mongodb</span><span class=w>
+</span><span class=w>        </span><span class=nt>image</span><span class=p>:</span><span class=w> </span><span class=l>mongo</span><span class=w>
+</span><span class=w>        </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span><span class=w>        </span>- <span class=nt>containerPort</span><span class=p>:</span><span class=w> </span><span class=m>27017</span><span class=w>
+</span><span class=w></span><span class=nn>---</span><span class=w>
+</span><span class=w></span><span class=nt>apiVersion</span><span class=p>:</span><span class=w> </span><span class=l>v1</span><span class=w>
+</span><span class=w></span><span class=nt>kind</span><span class=p>:</span><span class=w> </span><span class=l>Service</span><span class=w>
+</span><span class=w></span><span class=nt>metadata</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>mongodb-service</span><span class=w>
+</span><span class=w></span><span class=nt>spec</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>selector</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>app</span><span class=p>:</span><span class=w> </span><span class=l>mongodb</span><span class=w>
+</span><span class=w>  </span><span class=nt>ports</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span>- <span class=nt>protocol</span><span class=p>:</span><span class=w> </span><span class=l>TCP</span><span class=w>
+</span><span class=w>      </span><span class=nt>port</span><span class=p>:</span><span class=w> </span><span class=m>27017</span><span class=w>
+</span><span class=w>      </span><span class=nt>targetPort</span><span class=p>:</span><span class=w> </span><span class=m>27017</span><span class=w>        
+</span></code></pre></td></tr></table></div></div><p>按需进行修改, 修改完成之后应用配置清单:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ kubectl apply -f MongoDB-depl-svc.yaml
+</code></pre></td></tr></table></div></div><p>等待<code>MongoDB</code>部署完成&mldr;</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ kubectl get deployment/mongodb-deployment -w
+NAME                 READY   UP-TO-DATE   AVAILABLE   AGE
+mongodb-deployment   2/2     <span class=m>2</span>            <span class=m>0</span>           3m13s
+</code></pre></td></tr></table></div></div><h3 id=部署mongodb-exporter>部署<code>MongoDB Exporter</code></h3><p>添加<code>helm repo</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+$ helm repo update
+</code></pre></td></tr></table></div></div><p>下载<code>chart</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ helm pull prometheus-community/prometheus-mongodb-exporter --untar
+</code></pre></td></tr></table></div></div><p>修改<code>value.yaml</code>文件内容:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-yaml data-lang=yaml><span class=nn>...</span><span class=w>
+</span><span class=w></span><span class=c># 使用kubectl get svc获取MongoDB的服务及端口</span><span class=w>
+</span><span class=w></span><span class=nt>mongodb</span><span class=p>:</span><span class=w> 
+</span><span class=w>  </span><span class=nt>uri</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;mongodb://mongodb-service:27017&#34;</span><span class=w>
+</span><span class=w></span><span class=nn>...</span><span class=w>
+</span><span class=w></span><span class=c># 从上面可以得知servicemonitor所匹配的标签 release: prometheus</span><span class=w>
+</span><span class=w></span><span class=nt>serviceMonitor</span><span class=p>:</span><span class=w>
+</span><span class=w>  </span><span class=nt>additionalLabels</span><span class=p>:</span><span class=w>
+</span><span class=w>    </span><span class=nt>release</span><span class=p>:</span><span class=w> </span><span class=l>prometheus</span><span class=w>
+</span><span class=w></span><span class=nn>...</span><span class=w>
+</span></code></pre></td></tr></table></div></div><p>应用<code>chart</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ helm install mongodb-exporter prometheus-mongodb-exporter/
+</code></pre></td></tr></table></div></div><p>等待<code>svc</code>,<code>pod</code>部署完成之后, 映射<code>mongodb-exporter</code>, 检查<code>/metrics</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ kubectl port-forward service/mongodb-exporter-prometheus-mongodb-exporter <span class=m>9216</span>  
+</code></pre></td></tr></table></div></div><p>打开浏览器访问<code>http://localhost:9216/metrics</code>进行查看:</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20metrics.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20metrics.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20metrics.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20metrics.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20metrics.png title=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20metrics.png></p><p>此时, 再打开<code>prometheus UI</code>查看<code>target</code>可以看到<code>mongodb-exporter</code>已经处于<code>UP</code>状态:</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20target.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20target.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20target.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20target.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20target.png title=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20target.png></p><h3 id=在grafana查看>在<code>Grafana</code>查看</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ kubectl port-forward deployment/prometheus-grafana <span class=m>3000</span>
+</code></pre></td></tr></table></div></div><p>打开浏览器访问<code>http://localhost:3000</code>:</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20grafana.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20grafana.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20grafana.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20grafana.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20grafana.png title=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/mongodb%20grafana.png></p><p>:information_source:默认账号<code>admin</code>, 默认密码<code>prom-operator</code> (从官方文档中即可获取)</p><h2 id=附录1-chart-地址>附录1: chart 地址</h2><p>上文中所使用的<code>chart</code>仓库地址:</p><ul><li>kube-prometheus-stack: <a href=https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack>https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack</a></li><li>mongodb-exporter: <a href=https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-mongodb-exporter>https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-mongodb-exporter</a></li></ul><h2 id=附录2-kubectl-get-all>附录2: kubectl get all</h2><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/kubectl%20get%20all.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/kubectl%20get%20all.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/kubectl%20get%20all.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/kubectl%20get%20all.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/kubectl%20get%20all.png title=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/prometheus%2Bk8s/kubectl%20get%20all.png></p></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-10-08</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://ictw.github.io/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/ data-title=在k8s上使用Prometheus监控MongoDB data-hashtags=k8s,prometheus,mongodb,grafana><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://ictw.github.io/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/ data-hashtag=k8s><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Hacker News" data-sharer=hackernews data-url=https://ictw.github.io/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/ data-title=在k8s上使用Prometheus监控MongoDB><i class="fab fa-hacker-news fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://ictw.github.io/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/ data-title=在k8s上使用Prometheus监控MongoDB><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://ictw.github.io/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/ data-title=在k8s上使用Prometheus监控MongoDB data-ralateuid=AGou-ops><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=https://ictw.github.io/loveit/post/%E5%9C%A8k8s%E4%B8%8A%E4%BD%BF%E7%94%A8prometheus%E7%9B%91%E6%8E%A7mongodb/ data-title=在k8s上使用Prometheus监控MongoDB><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/baidu.svg></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/loveit/tags/k8s/>k8s</a>,&nbsp;<a href=/loveit/tags/prometheus/>prometheus</a>,&nbsp;<a href=/loveit/tags/mongodb/>mongodb</a>,&nbsp;<a href=/loveit/tags/grafana/>grafana</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/loveit/>主页</a></span></section></div><div class=post-nav><a href=/loveit/post/%E8%87%AA%E5%AE%9A%E4%B9%89shortcode/ class=prev rel=prev title="自定义 shortcode"><i class="fas fa-angle-left fa-fw"></i>自定义 shortcode</a>
+<a href=/loveit/post/devops-notes/ class=next rel=next title="DevOps - Notes">DevOps - Notes<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://agou-ops.github.io/-/ target=_blank rel="noopener noreferrer" style=color:red>【AGou-ops.cn】</a> 备份站点</div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.75.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2018 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/loveit/ target=_blank>AGou-ops</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp>鲁ICP备19050296号-2</span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/twemoji@13.0.0/dist/twemoji.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"AGou-ops/comments"}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"5M8VQRD7W9","algoliaIndex":"blog-2","algoliaSearchKey":"2fcdbd0ce638664e7a28cc64939603b9","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"twemoji":true};</script><script type=text/javascript src=/loveit/js/theme.min.js></script></body></html>

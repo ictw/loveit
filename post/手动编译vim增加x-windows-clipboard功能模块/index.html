@@ -1,0 +1,201 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>手动编译vim增加X Windows Clipboard功能模块 - AGou's Blog-2</title><meta name=Description content="关于博主"><meta property="og:title" content="手动编译vim增加X Windows Clipboard功能模块"><meta property="og:description" content="默认直接通过apt或者apt-get安装的vim功能不全，缺少clipboard功能，原因是debian官方为了兼容性才如此考虑，但debian官方也同样提供了以下几个包来满足GUI需求：
+
+
+1
+2
+3
+4
+5
+6
+
+
+vim-athena
+Vi IMproved - enhanced vi editor - with Athena GUI
+vim-gtk
+Vi IMproved - enhanced vi editor - with GTK2 GUI
+vim-gtk3
+Vi IMproved - enhanced vi editor - with GTK3 GUI"><meta property="og:type" content="article"><meta property="og:url" content="https://ictw.github.io/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/"><meta property="og:image" content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta property="article:published_time" content="2021-08-17T14:08:32+08:00"><meta property="article:modified_time" content="2021-08-17T14:08:32+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta name=twitter:title content="手动编译vim增加X Windows Clipboard功能模块"><meta name=twitter:description content="默认直接通过apt或者apt-get安装的vim功能不全，缺少clipboard功能，原因是debian官方为了兼容性才如此考虑，但debian官方也同样提供了以下几个包来满足GUI需求：
+
+
+1
+2
+3
+4
+5
+6
+
+
+vim-athena
+Vi IMproved - enhanced vi editor - with Athena GUI
+vim-gtk
+Vi IMproved - enhanced vi editor - with GTK2 GUI
+vim-gtk3
+Vi IMproved - enhanced vi editor - with GTK3 GUI"><meta name=application-name content="AGou's Blog-2."><meta name=apple-mobile-web-app-title content="AGou's Blog-2."><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/myBlog-2/favicon.png><link rel=icon type=image/png sizes=32x32 href=/myBlog-2/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/myBlog-2/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ictw.github.io/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/><link rel=prev href=https://ictw.github.io/loveit/post/%E6%A0%B9%E6%8D%AEcsv%E9%87%8D%E5%BD%92%E6%A1%A3%E6%96%87%E4%BB%B6/><link rel=next href=https://ictw.github.io/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/loveit/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"手动编译vim增加X Windows Clipboard功能模块","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ictw.github.io\/loveit\/post\/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97\/"},"image":["https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"],"genre":"posts","keywords":"vim, 编译, clipboard","wordcount":1172,"url":"https:\/\/ictw.github.io\/loveit\/post\/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97\/","datePublished":"2021-08-17T14:08:32+08:00","dateModified":"2021-08-17T14:08:32+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"AGou-ops","logo":"https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"},"author":{"@type":"Person","name":"AGou-ops"},"description":""}</script></head><body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/myBlog-2/posts/>所有文章 </a><a class=menu-item href=/myBlog-2/tags/>标签 </a><a class=menu-item href=/myBlog-2/categories/>分类 </a><a class=menu-item href=/myBlog-2/anime/>Anime </a><a class=menu-item href=/myBlog-2/about/>关于 </a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value;"><option value=/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/myBlog-2/posts/>所有文章</a><a class=menu-item href=/myBlog-2/tags/>标签</a><a class=menu-item href=/myBlog-2/categories/>分类</a><a class=menu-item href=/myBlog-2/anime/>Anime</a><a class=menu-item href=/myBlog-2/about/>关于</a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value;"><option value=/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/ selected>简体中文</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">手动编译vim增加X Windows Clipboard功能模块</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/loveit/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>AGou-ops</a></span>&nbsp;<span class=post-category>收录于 <a href=/loveit/categories/vim/><i class="far fa-folder fa-fw"></i>vim</a>&nbsp;<a href=/loveit/categories/ubuntu/><i class="far fa-folder fa-fw"></i>Ubuntu</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-08-17>2021-08-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1172 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#编译环境>编译环境</a></li><li><a href=#编译安装vim>编译安装vim</a></li><li><a href=#最后>最后</a></li><li><a href=#参考链接>参考链接</a></li></ul></nav></div></div><div class=content id=content><p>默认直接通过<code>apt</code>或者<code>apt-get</code>安装的vim功能不全，缺少<code>clipboard</code>功能，原因是debian官方为了兼容性才如此考虑，但debian官方也同样提供了以下几个包来满足GUI需求：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>vim-athena
+Vi IMproved - enhanced vi editor - with Athena GUI
+vim-gtk
+Vi IMproved - enhanced vi editor - with GTK2 GUI
+vim-gtk3
+Vi IMproved - enhanced vi editor - with GTK3 GUI
+</code></pre></td></tr></table></div></div><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/vim/debian_vim_packages.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/vim/debian_vim_packages.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/vim/debian_vim_packages.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/vim/debian_vim_packages.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/blog-images/vim/debian_vim_packages.png title=debian_vim_packages></p><p>可以直接通过<code>apt install &lt;Package_name></code>来安装以上包来直接使用。</p><p>但是我感觉功能还是不够全面，因此下面我简单介绍通过编译来安装带有<code>X-Window Clipboard</code>模块的vim：</p><h2 id=编译环境>编译环境</h2><p>安装编译环境：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ sudo apt install -y build-essential            <span class=c1># 安装编译包组</span>
+<span class=c1># 其他必要软件包</span>
+$ sudo apt install -y libxt-dev libgtk-3-dev <span class=se>\
+</span><span class=se></span>    libpython3-dev  <span class=se>\ </span>   <span class=c1># 如果要添加python3支持，需要额外安装此包</span>
+    libtool libtool-bin <span class=se>\ </span> <span class=c1># 编译时可能因没有libtool而报错</span>
+    libncurses5-dev libgnome2-dev libgnomeui-dev   libgtk2.0-dev libatk1.0-dev libbonoboui2-dev   libcairo2-dev libx11-dev libxpm-dev libxt-dev     <span class=c1># 其他额外可能用到的包</span>
+</code></pre></td></tr></table></div></div><h2 id=编译安装vim>编译安装vim</h2><p>拉取仓库最新源码包：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ git clone https://github.com/vim/vim.git
+</code></pre></td></tr></table></div></div><p>进入相关目录：<code>cd vim/src</code>
+在目录下执行以下命令：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ ./configure <span class=se>\
+</span><span class=se></span>    --enable-cscope <span class=se>\
+</span><span class=se></span>    --with-features<span class=o>=</span>huge <span class=se>\
+</span><span class=se></span>    --with-x <span class=se>\
+</span><span class=se></span>    --with-compiledby<span class=o>=</span><span class=s2>&#34;AGou-ops&lt;AGou-ops@foxmail.com&gt;&#34;</span>
+</code></pre></td></tr></table></div></div><p>其他详细编译选项及说明参考：<a href=https://github.com/vim/vim/blob/master/src/INSTALL target=_blank rel="noopener noreffer">VIM INSTALL file</a></p><p>编译直接使用以下命令：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ make -j4        <span class=c1># -j表示线程数，看个人CPU核心数而定</span>
+</code></pre></td></tr></table></div></div><p>编译完成之后会在当前目录生成相关二进制文件，此时检查vim编译的各项参数：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ ./vim --version
+VIM - Vi IMproved 8.2 <span class=o>(</span><span class=m>2019</span> Dec 12, compiled Aug <span class=m>17</span> <span class=m>2021</span> 14:03:35<span class=o>)</span>
+Included patches: 1-3356
+Compiled by AGou-ops&lt;AGou-ops@foxmail.com&gt;
+Huge version with GTK3 GUI.  Features included <span class=o>(</span>+<span class=o>)</span> or not <span class=o>(</span>-<span class=o>)</span>:
++acl               +file_in_path      +mouse_urxvt       -tag_any_white
++arabic            +find_in_path      +mouse_xterm       -tcl
++autocmd           +float             +multi_byte        +termguicolors
++autochdir         +folding           +multi_lang        +terminal
+-autoservername    -footer            -mzscheme          +terminfo
++balloon_eval      +fork<span class=o>()</span>            +netbeans_intg     +termresponse
++balloon_eval_term -gettext           +num64             +textobjects
++browse            -hangul_input      +packages          +textprop
+++builtin_terms    +iconv             +path_extra        +timers
++byte_offset       +insert_expand     -perl              +title
++channel           +ipv6              +persistent_undo   +toolbar
++cindent           +job               +popupwin          +user_commands
++clientserver      +jumplist          +postscript        +vartabs
++clipboard         +keymap            +printer           +vertsplit
++cmdline_compl     +lambda            +profile           +virtualedit
++cmdline_hist      +langmap           -python            +visual
++cmdline_info      +libcall           -python3           +visualextra
++comments          +linebreak         +quickfix          +viminfo
++conceal           +lispindent        +reltime           +vreplace
++cryptv            +listcmds          +rightleft         +wildignore
++cscope            +localmap          -ruby              +wildmenu
++cursorbind        -lua               +scrollbind        +windows
++cursorshape       +menu              +signs             +writebackup
++dialog_con_gui    +mksession         +smartindent       +X11
++diff              +modify_fname      -sodium            -xfontset
++digraphs          +mouse             -sound             +xim
++dnd               +mouseshape        +spell             -xpm
+-ebcdic            +mouse_dec         +startuptime       +xsmp_interact
++emacs_tags        -mouse_gpm         +statusline        +xterm_clipboard
++eval              -mouse_jsbterm     -sun_workshop      -xterm_save
++ex_extra          +mouse_netterm     +syntax            
++extra_search      +mouse_sgr         +tag_binary        
+-farsi             -mouse_sysmouse    -tag_old_static    
+   system vimrc file: <span class=s2>&#34;</span><span class=nv>$VIM</span><span class=s2>/vimrc&#34;</span>
+     user vimrc file: <span class=s2>&#34;</span><span class=nv>$HOME</span><span class=s2>/.vimrc&#34;</span>
+ 2nd user vimrc file: <span class=s2>&#34;~/.vim/vimrc&#34;</span>
+      user exrc file: <span class=s2>&#34;</span><span class=nv>$HOME</span><span class=s2>/.exrc&#34;</span>
+  system gvimrc file: <span class=s2>&#34;</span><span class=nv>$VIM</span><span class=s2>/gvimrc&#34;</span>
+    user gvimrc file: <span class=s2>&#34;</span><span class=nv>$HOME</span><span class=s2>/.gvimrc&#34;</span>
+2nd user gvimrc file: <span class=s2>&#34;~/.vim/gvimrc&#34;</span>
+       defaults file: <span class=s2>&#34;</span><span class=nv>$VIMRUNTIME</span><span class=s2>/defaults.vim&#34;</span>
+    system menu file: <span class=s2>&#34;</span><span class=nv>$VIMRUNTIME</span><span class=s2>/menu.vim&#34;</span>
+  fall-back <span class=k>for</span> <span class=nv>$VIM</span>: <span class=s2>&#34;/usr/local/share/vim&#34;</span>
+Compilation: gcc -c -I. -Iproto -DHAVE_CONFIG_H -DFEAT_GUI_GTK -pthread -I/usr/include/gtk-3.0 -I/usr/include/at-spi2-atk/2.0 -I/usr/include/at-spi-2.0 -I/usr/include/dbus-1.0 -I/usr/lib/x86_64-linux-gnu/dbus-1.0/include -I/usr/include/gtk-3.0 -I/usr/include/gio-unix-2.0 -I/usr/include/cairo -I/usr/include/pango-1.0 -I/usr/include/fribidi -I/usr/include/harfbuzz -I/usr/include/atk-1.0 -I/usr/include/cairo -I/usr/include/pixman-1 -I/usr/include/uuid -I/usr/include/freetype2 -I/usr/include/libpng16 -I/usr/include/gdk-pixbuf-2.0 -I/usr/include/libmount -I/usr/include/blkid -I/usr/include/glib-2.0 -I/usr/lib/x86_64-linux-gnu/glib-2.0/include -g -O2 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE<span class=o>=</span><span class=m>1</span> 
+Linking: gcc -L/usr/local/lib -Wl,--as-needed -o vim -lgtk-3 -lgdk-3 -lpangocairo-1.0 -lpango-1.0 -lharfbuzz -latk-1.0 -lcairo-gobject -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lgobject-2.0 -lglib-2.0 -lSM -lICE -lXt -lX11 -lXdmcp -lSM -lICE -lm -ltinfo -lselinux -ldl 
+</code></pre></td></tr></table></div></div><p>嘶~有点多:joy: ，我们只看我们想要的<code>clipboard</code>模块：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ ./vim --version <span class=p>|</span> grep clipboard
++clipboard         +keymap            +printer           +vertsplit
++emacs_tags        -mouse_gpm         +statusline        +xterm_clipboard
+</code></pre></td></tr></table></div></div><p>主要看<code>+clipboard</code>和<code>+xterm_clipboard</code> 前面是否有<code>+</code>，默认<code>apt</code>直接安装的vim显示的是<code>-</code>，即表示未编译安装此模块。</p><p>飒，执行最后的安装步骤：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ sudo make install
+</code></pre></td></tr></table></div></div><p>执行完该命令之后，直接在终端使用<code>vim</code>命令即可体验新特性及自己编译安装好的X-Window Clipboard模块，yeah！</p><h2 id=最后>最后</h2><p>编译安装vim前，建议先卸载掉原来版本的vim再进行编译安装（<code>sudo apt remove vim -y</code>），如果你没有提前卸载掉原来的vim，可以使用以下方法来用新版本vim替换旧版本vim：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>sudo update-alternatives --install <span class=s2>&#34;/usr/bin/vim&#34;</span> <span class=s2>&#34;vim&#34;</span> <span class=s2>&#34;/usr/local/bin/vim&#34;</span> <span class=m>1</span>
+sudo update-alternatives --install <span class=s2>&#34;/usr/bin/vi&#34;</span> <span class=s2>&#34;vi&#34;</span> <span class=s2>&#34;/usr/local/bin/vim&#34;</span> <span class=m>1</span>
+
+sudo update-alternatives --config vim
+sudo update-alternatives --config vi
+sudo update-alternatives --config gvim
+</code></pre></td></tr></table></div></div><p>使用<code>ls -lah /usr/bin/vim</code>来检查新vim是否生效。</p><h2 id=参考链接>参考链接</h2><ul><li>Github gist: <a href=https://gist.github.com/lirenlin/63453cda5181028b2565>https://gist.github.com/lirenlin/63453cda5181028b2565</a></li><li>why-is-vim-for-debian-compiled-without-clipboard: <a href=https://vi.stackexchange.com/questions/13564/why-is-vim-for-debian-compiled-without-clipboard>https://vi.stackexchange.com/questions/13564/why-is-vim-for-debian-compiled-without-clipboard</a></li><li>How to Copy Text to Clipboard in Vim: <a href=https://linoxide.com/copy-text-to-clipboard-in-vim/>https://linoxide.com/copy-text-to-clipboard-in-vim/</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2021-08-17</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://ictw.github.io/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/ data-title="手动编译vim增加X Windows Clipboard功能模块" data-hashtags=vim,编译,clipboard><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://ictw.github.io/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/ data-hashtag=vim><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Hacker News" data-sharer=hackernews data-url=https://ictw.github.io/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/ data-title="手动编译vim增加X Windows Clipboard功能模块"><i class="fab fa-hacker-news fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://ictw.github.io/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/ data-title="手动编译vim增加X Windows Clipboard功能模块"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://ictw.github.io/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/ data-title="手动编译vim增加X Windows Clipboard功能模块" data-ralateuid=AGou-ops><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=https://ictw.github.io/loveit/post/%E6%89%8B%E5%8A%A8%E7%BC%96%E8%AF%91vim%E5%A2%9E%E5%8A%A0x-windows-clipboard%E5%8A%9F%E8%83%BD%E6%A8%A1%E5%9D%97/ data-title="手动编译vim增加X Windows Clipboard功能模块"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/baidu.svg></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/loveit/tags/vim/>vim</a>,&nbsp;<a href=/loveit/tags/%E7%BC%96%E8%AF%91/>编译</a>,&nbsp;<a href=/loveit/tags/clipboard/>clipboard</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/loveit/>主页</a></span></section></div><div class=post-nav><a href=/loveit/post/%E6%A0%B9%E6%8D%AEcsv%E9%87%8D%E5%BD%92%E6%A1%A3%E6%96%87%E4%BB%B6/ class=prev rel=prev title=根据csv重归档文件><i class="fas fa-angle-left fa-fw"></i>根据csv重归档文件</a>
+<a href=/loveit/post/%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F/ class=next rel=next title=最全内网穿透工具>最全内网穿透工具<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://agou-ops.github.io/-/ target=_blank rel="noopener noreferrer" style=color:red>【AGou-ops.cn】</a> 备份站点</div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.75.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2018 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/loveit/ target=_blank>AGou-ops</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp>鲁ICP备19050296号-2</span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/twemoji@13.0.0/dist/twemoji.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"AGou-ops/comments"}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"5M8VQRD7W9","algoliaIndex":"blog-2","algoliaSearchKey":"2fcdbd0ce638664e7a28cc64939603b9","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"twemoji":true};</script><script type=text/javascript src=/loveit/js/theme.min.js></script></body></html>

@@ -1,0 +1,174 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>K8s网络学习 - AGou's Blog-2</title><meta name=Description content="关于博主"><meta property="og:title" content="K8s网络学习"><meta property="og:description" content="从简单p2p网络到k8s复杂型网络。
+简单p2p网络模型
+
+:information_source:简单说明：创建两个网络命名空间client和server，然后创建一对虚拟网卡将两端的命名空间相连起来，就好像直接相连的网线一样，中间没有阻拦，创建完的虚拟网卡对存在于默认的命名空间中，接着我们将其分别放入client和server命名空间中，最后为两个虚拟网卡对veth-client和veth-server分配IP地址并启用网卡。"><meta property="og:type" content="article"><meta property="og:url" content="https://ictw.github.io/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/"><meta property="og:image" content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta property="article:published_time" content="2021-11-02T14:30:23+08:00"><meta property="article:modified_time" content="2021-11-02T14:30:23+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta name=twitter:title content="K8s网络学习"><meta name=twitter:description content="从简单p2p网络到k8s复杂型网络。
+简单p2p网络模型
+
+:information_source:简单说明：创建两个网络命名空间client和server，然后创建一对虚拟网卡将两端的命名空间相连起来，就好像直接相连的网线一样，中间没有阻拦，创建完的虚拟网卡对存在于默认的命名空间中，接着我们将其分别放入client和server命名空间中，最后为两个虚拟网卡对veth-client和veth-server分配IP地址并启用网卡。"><meta name=application-name content="AGou's Blog-2."><meta name=apple-mobile-web-app-title content="AGou's Blog-2."><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/myBlog-2/favicon.png><link rel=icon type=image/png sizes=32x32 href=/myBlog-2/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/myBlog-2/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ictw.github.io/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/><link rel=prev href=https://ictw.github.io/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/><link rel=next href=https://ictw.github.io/loveit/post/shell-tricks/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/loveit/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"K8s网络学习","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ictw.github.io\/loveit\/post\/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy\/"},"image":["https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"],"genre":"posts","wordcount":1431,"url":"https:\/\/ictw.github.io\/loveit\/post\/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy\/","datePublished":"2021-11-02T14:30:23+08:00","dateModified":"2021-11-02T14:30:23+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"AGou-ops","logo":"https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"},"author":{"@type":"Person","name":"AGou-ops"},"description":""}</script></head><body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/myBlog-2/posts/>所有文章 </a><a class=menu-item href=/myBlog-2/tags/>标签 </a><a class=menu-item href=/myBlog-2/categories/>分类 </a><a class=menu-item href=/myBlog-2/anime/>Anime </a><a class=menu-item href=/myBlog-2/about/>关于 </a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value;"><option value=/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/myBlog-2/posts/>所有文章</a><a class=menu-item href=/myBlog-2/tags/>标签</a><a class=menu-item href=/myBlog-2/categories/>分类</a><a class=menu-item href=/myBlog-2/anime/>Anime</a><a class=menu-item href=/myBlog-2/about/>关于</a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value;"><option value=/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/ selected>简体中文</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">K8s网络学习</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/loveit/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>AGou-ops</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2021-11-02>2021-11-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1431 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#简单p2p网络模型>简单p2p网络模型</a></li><li><a href=#docker网桥模型>Docker网桥模型</a><ul><li><a href=#节点间网络传输>节点间网络传输</a></li></ul></li><li><a href=#k8s服务网络>k8s服务网络</a></li><li><a href=#参考链接>参考链接</a></li></ul></nav></div></div><div class=content id=content><p>从简单<code>p2p</code>网络到k8s复杂型网络。</p><h2 id=简单p2p网络模型>简单p2p网络模型</h2><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211102145031780.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211102145031780.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211102145031780.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211102145031780.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211102145031780.png title=image-20211102145031780></p><p>:information_source:简单说明：创建两个网络命名空间<code>client</code>和<code>server</code>，然后创建一对虚拟网卡将两端的命名空间相连起来，就好像直接相连的网线一样，中间没有阻拦，创建完的虚拟网卡对存在于默认的命名空间中，接着我们将其分别放入<code>client</code>和<code>server</code>命名空间中，最后为两个虚拟网卡对<code>veth-client</code>和<code>veth-server</code>分配IP地址并启用网卡。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 步骤全流程</span>
+$ ip netns add client
+$ ip netns add server
+$ ip netns list
+server
+client
+$ ip link add veth-client <span class=nb>type</span> veth peer name veth-server
+$ ip link list <span class=p>|</span> grep veth
+4: veth-server@veth-client: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu <span class=m>1500</span> qdisc noop state DOWN mode DEFAULT group default qlen <span class=m>1000</span>
+5: veth-client@veth-server: &lt;BROADCAST,MULTICAST,M-DOWN&gt; mtu <span class=m>1500</span> qdisc noop state DOWN mode DEFAULT group default qlen <span class=m>1000</span>
+$ ip link <span class=nb>set</span> veth-client netns client
+$ ip link <span class=nb>set</span> veth-server netns server		<span class=c1># 将虚拟网卡移动至相应的命名空间去，此时默认的网络命名空间中将不复存在</span>
+$ ip netns <span class=nb>exec</span> client ip address add 10.0.0.11/24 dev veth-client
+$ ip netns <span class=nb>exec</span> client ip link <span class=nb>set</span> veth-client up
+$ ip netns <span class=nb>exec</span> server ip address add 10.0.0.12/24 dev veth-server
+$ ip netns <span class=nb>exec</span> server ip link <span class=nb>set</span> veth-server up
+$ ip netns <span class=nb>exec</span> client ip addr
+1: lo: &lt;LOOPBACK&gt; mtu <span class=m>65536</span> qdisc noop state DOWN group default qlen 1		<span class=c1># 默认的lo暂时用不到，所以在此就不启用了</span>
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+5: veth-client@if4: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class=m>1500</span> qdisc noqueue <span class=sb>`</span>state UP<span class=sb>`</span> group default qlen 1000		<span class=c1># 可以看到网卡已被成功启用</span>
+    link/ether ca:e8:30:2e:f9:d2 brd ff:ff:ff:ff:ff:ff link-netnsid <span class=m>1</span>
+    inet 10.0.0.11/24 scope global veth-client
+       valid_lft forever preferred_lft forever
+    inet6 fe80::c8e8:30ff:fe2e:f9d2/64 scope link
+       valid_lft forever preferred_lft forever
+<span class=c1># 同样，server网络命名空间，输出相似，略</span>
+$ ip netns <span class=nb>exec</span> server ip addr
+。。。
+<span class=c1># 互ping测试</span>
+$ ip netns <span class=nb>exec</span> client ping 10.0.0.12
+$ ip netns <span class=nb>exec</span> server ping 10.0.0.11
+</code></pre></td></tr></table></div></div><h2 id=docker网桥模型>Docker网桥模型</h2><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211102145100986.png data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211102145100986.png, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211102145100986.png 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211102145100986.png 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/image-20211102145100986.png title=image-20211102145100986></p><p>如果要创建更网络命名空间并互相连接，用 <code>veth</code> 对将这些网络命名空间进行两两连接就很麻烦了。可以创建创建一个 Linux 网桥来连接这些网络命名空间。Docker 就是这样为同一主机内的容器进行连接的。</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=c1># 步骤全流程</span>
+$ <span class=nv>BR</span><span class=o>=</span>bridge1
+$ <span class=nv>HOST_IP</span><span class=o>=</span>192.168.0.116
+$ ip link add client1-veth <span class=nb>type</span> veth peer name client1-veth-br			<span class=c1># 添加虚拟网卡与虚拟网桥对</span>
+$ ip link add server1-veth <span class=nb>type</span> veth peer name server1-veth-br
+$ ip link add <span class=nv>$BR</span> <span class=nb>type</span> bridge			<span class=c1># 添加网桥</span>
+$ ip netns add client1
+$ ip netns add server1
+$ ip link <span class=nb>set</span> client1-veth netns client1
+$ ip link <span class=nb>set</span> server1-veth netns server1
+$ ip link <span class=nb>set</span> client1-veth-br master <span class=nv>$BR</span>
+$ ip link <span class=nb>set</span> server1-veth-br master <span class=nv>$BR</span>
+$ ip link <span class=nb>set</span> <span class=nv>$BR</span> up
+$ ip link <span class=nb>set</span> client1-veth-br up
+$ ip link <span class=nb>set</span> server1-veth-br up
+$ ip netns <span class=nb>exec</span> client1 ip link <span class=nb>set</span> client1-veth up
+$ ip netns <span class=nb>exec</span> server1 ip link <span class=nb>set</span> server1-veth up
+$ ip netns <span class=nb>exec</span> client1 ip addr add 192.168.1.11/24 dev client1-veth
+$ ip netns <span class=nb>exec</span> server1 ip addr add 192.168.1.12/24 dev server1-veth
+$ ip addr add 192.168.1.1/24 dev <span class=nv>$BR</span>			<span class=c1># 为网桥分配ip地址</span>
+$ ip netns <span class=nb>exec</span> client1 ping 192.168.1.12 -c <span class=m>5</span>
+$ ip netns <span class=nb>exec</span> client1 ping 192.168.1.1 -c <span class=m>5</span>
+</code></pre></td></tr></table></div></div><p>发现最后一条命令报错<code>connect: Network is unreachable</code>，原因路由不通，加入一条缺省路由即可：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ ip netns <span class=nb>exec</span> client1 ip route add default via 192.168.1.1
+$ ip netns <span class=nb>exec</span> server1 ip route add default via 192.168.1.1
+</code></pre></td></tr></table></div></div><blockquote><p><strong>外部服务器访问内部(Docker为例)：</strong></p><p>Docker 创建的 <code>netns</code> 没有保存在缺省位置，所以 <code>ip netns list</code> 是看不到这个网络命名空间的。我们可以在缺省位置创建一个符号链接：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ <span class=nv>container_id</span><span class=o>=</span>web
+$ <span class=nv>container_netns</span><span class=o>=</span><span class=k>$(</span>docker inspect <span class=si>${</span><span class=nv>container_id</span><span class=si>}</span> --format <span class=s1>&#39;{{ .NetworkSettings.SandboxKey }}&#39;</span><span class=k>)</span>
+$ mkdir -p /var/run/netns
+$ rm -f /var/run/netns/<span class=si>${</span><span class=nv>container_id</span><span class=si>}</span>
+$ ln -sv <span class=si>${</span><span class=nv>container_netns</span><span class=si>}</span> /var/run/netns/<span class=si>${</span><span class=nv>container_id</span><span class=si>}</span>
+<span class=s1>&#39;/var/run/netns/web&#39;</span> -&gt; <span class=s1>&#39;/var/run/docker/netns/c009f2a4be71&#39;</span>
+$ ip netns list
+web <span class=o>(</span>id: 3<span class=o>)</span>
+server1 <span class=o>(</span>id: 1<span class=o>)</span>
+client1 <span class=o>(</span>id: 0<span class=o>)</span>
+</code></pre></td></tr></table></div></div><p>看看 <code>web</code> 命名空间的 IP 地址：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ ip netns <span class=nb>exec</span> web ip addr
+1: lo: &lt;LOOPBACK,UP,LOWER_UP&gt; mtu <span class=m>65536</span> qdisc noqueue state UNKNOWN group default qlen <span class=m>1</span>
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+11: eth0@if12: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class=m>1500</span> qdisc noqueue state UP group default
+    link/ether 02:42:ac:12:00:03 brd ff:ff:ff:ff:ff:ff link-netnsid <span class=m>0</span>
+    inet 172.18.0.3/24 brd 172.18.0.255 scope global eth0
+       valid_lft forever preferred_lft forever
+</code></pre></td></tr></table></div></div><p>然后看看容器里的 IP 地址：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ <span class=nv>WEB_IP</span><span class=o>=</span><span class=sb>`</span>docker inspect -f <span class=s2>&#34;{{ .NetworkSettings.IPAddress }}&#34;</span> web<span class=sb>`</span>
+$ <span class=nb>echo</span> <span class=nv>$WEB_IP</span>
+172.18.0.3
+</code></pre></td></tr></table></div></div><p>加入端口转发规则，其它主机就能访问这个 nginx 了：</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>$ iptables -t nat -A PREROUTING -p tcp --dport <span class=m>80</span> -j DNAT --to-destination <span class=nv>$WEB_IP</span>:80
+$ curl localhost:80
+</code></pre></td></tr></table></div></div></blockquote><h3 id=节点间网络传输>节点间网络传输</h3><p>如下图所示：</p><p><img class=lazyload src=/loveit/svg/loading.min.svg data-src=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/simple-network-k8s.gif data-srcset="https://agou-images.oss-cn-qingdao.aliyuncs.com/others/simple-network-k8s.gif, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/simple-network-k8s.gif 1.5x, https://agou-images.oss-cn-qingdao.aliyuncs.com/others/simple-network-k8s.gif 2x" data-sizes=auto alt=https://agou-images.oss-cn-qingdao.aliyuncs.com/others/simple-network-k8s.gif title=image-20211104090616265></p><h2 id=k8s服务网络>k8s服务网络</h2><p>技术类文章网上一搜一大片，这里我分享一个之前YouTube上看到的一个视频，简洁明了。</p><style type=text/css>#dplayer-video-container{max-width:800px;margin:0 auto;margin-top:-1rem}@media screen and (max-device-width:400px){#dplayer{width:100%}}</style><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/dplayer@1.25.0/dist/DPlayer.min.css><div id=dplayer-video-container><div id=dplayer></div><div><script src=https://cdn.jsdelivr.net/npm/dplayer@1.26.0/dist/DPlayer.min.js></script><script>const dp=new DPlayer({container:document.getElementById('dplayer'),autoplay:false,theme:'#c05b4d',loop:false,lang:'zh-cn',screenshot:false,hotkey:true,preload:'auto',volume:0.7,mutex:true,logo:'https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/youtube.png',subtitle:{url:'https:\/\/agou-resources.oss-cn-chengdu.aliyuncs.com\/subtitles\/Kubernetes%20Services%20networking%20-%20English.vtt',type:'webvtt',fontSize:'20px',bottom:'3%',color:'#0000',},video:{type:'auto',url:'https:\/\/agou-resources.oss-cn-chengdu.aliyuncs.com\/video\/Kubernetes%20Services%20networking.mp4',pic:''},contextmenu:[{text:'❤ 博客主页',link:'https://agou-ops.github.io'},{text:'播放器信息',click:(player)=>{console.log(player);}}],highlight:[{time:'0',text:'ClusterIP',},{time:'107',text:'NodePort',},{time:'108',text:'ServiceIP with Calio',},{time:'',text:'',},{time:'',text:'',},],});</script><h2 id=参考链接>参考链接</h2><ul><li><p>Life of a Packet in Kubernetes — Part 1: <a href=https://dramasamy.medium.com/life-of-a-packet-in-kubernetes-part-1-f9bc0909e051>https://dramasamy.medium.com/life-of-a-packet-in-kubernetes-part-1-f9bc0909e051</a></p></li><li><p>kubernetes services network YouTube: <a href="https://www.youtube.com/watch?v=NFApeJRXos4">https://www.youtube.com/watch?v=NFApeJRXos4</a></p></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2021-11-02</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://ictw.github.io/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/ data-title=K8s网络学习><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://ictw.github.io/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Hacker News" data-sharer=hackernews data-url=https://ictw.github.io/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/ data-title=K8s网络学习><i class="fab fa-hacker-news fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://ictw.github.io/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/ data-title=K8s网络学习><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://ictw.github.io/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/ data-title=K8s网络学习 data-ralateuid=AGou-ops><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=https://ictw.github.io/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0-copy/ data-title=K8s网络学习><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/baidu.svg></i></a></span></div></div></div><div class=post-info-more><section class=post-tags></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/loveit/>主页</a></span></section></div><div class=post-nav><a href=/loveit/post/k8s%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/ class=prev rel=prev title=K8s网络学习><i class="fas fa-angle-left fa-fw"></i>K8s网络学习</a>
+<a href=/loveit/post/shell-tricks/ class=next rel=next title="Shell Tricks">Shell Tricks<i class="fas fa-angle-right fa-fw"></i></a></div></div><div id=comments><div id=utterances></div><noscript>Please enable JavaScript to view the comments powered by <a href=https://utteranc.es/>Utterances</a>.</noscript></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://agou-ops.github.io/-/ target=_blank rel="noopener noreferrer" style=color:red>【AGou-ops.cn】</a> 备份站点</div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.75.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2018 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/loveit/ target=_blank>AGou-ops</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp>鲁ICP备19050296号-2</span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/twemoji@13.0.0/dist/twemoji.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{"utterances":{"darkTheme":"github-dark","issueTerm":"pathname","label":"","lightTheme":"github-light","repo":"AGou-ops/comments"}},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"5M8VQRD7W9","algoliaIndex":"blog-2","algoliaSearchKey":"2fcdbd0ce638664e7a28cc64939603b9","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"twemoji":true};</script><script type=text/javascript src=/loveit/js/theme.min.js></script></body></html>

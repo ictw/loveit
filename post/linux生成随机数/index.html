@@ -1,0 +1,134 @@
+<!doctype html><html lang=zh-cn><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=robots content="noodp"><meta http-equiv=x-ua-compatible content="IE=edge, chrome=1"><title>Linux 生成随机数 - AGou's Blog-2</title><meta name=Description content="关于博主"><meta property="og:title" content="Linux 生成随机数"><meta property="og:description" content="[TOC] 通过 openssl 生成 1 2 3 4 5 6 7 8 9 10 [root@myhost ~]\# openssl rand -base64 3 xsSp [root@myhost ~]\# openssl rand -base64 8 8SlHCsBAiYw= [root@myhost ~]\# openssl rand -base64 10 nUzBw8ngKGGqWw== `openssl rand -base64 32|tr A-Z a-z|cut -c 1-10` 使用 date 命令生成 1 2 3 4 5 6 7 8 9 10 [root@myhost ~]\# date +%s 1539071518 [root@myhost ~]\# date"><meta property="og:type" content="article"><meta property="og:url" content="https://ictw.github.io/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/"><meta property="og:image" content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta property="article:published_time" content="2020-06-01T10:01:51+08:00"><meta property="article:modified_time" content="2020-06-01T10:01:51+08:00"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://agou-images.oss-cn-qingdao.aliyuncs.com/BaseIMG/tuoer.jpg"><meta name=twitter:title content="Linux 生成随机数"><meta name=twitter:description content="[TOC] 通过 openssl 生成 1 2 3 4 5 6 7 8 9 10 [root@myhost ~]\# openssl rand -base64 3 xsSp [root@myhost ~]\# openssl rand -base64 8 8SlHCsBAiYw= [root@myhost ~]\# openssl rand -base64 10 nUzBw8ngKGGqWw== `openssl rand -base64 32|tr A-Z a-z|cut -c 1-10` 使用 date 命令生成 1 2 3 4 5 6 7 8 9 10 [root@myhost ~]\# date +%s 1539071518 [root@myhost ~]\# date"><meta name=application-name content="AGou's Blog-2."><meta name=apple-mobile-web-app-title content="AGou's Blog-2."><meta name=theme-color content="#ffffff"><meta name=msapplication-TileColor content="#da532c"><link rel="shortcut icon" type=image/x-icon href=/myBlog-2/favicon.png><link rel=icon type=image/png sizes=32x32 href=/myBlog-2/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/myBlog-2/favicon-16x16.png><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=mask-icon href=/safari-pinned-tab.svg color=#5bbad5><link rel=manifest href=/site.webmanifest><link rel=canonical href=https://ictw.github.io/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/><link rel=prev href=https://ictw.github.io/loveit/post/scrcpy-android%E6%8A%95%E5%B1%8F%E7%A5%9E%E5%99%A8/><link rel=next href=https://ictw.github.io/loveit/post/linux-%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E7%9B%91%E6%8E%A7%E9%9D%A2%E6%9D%BF/><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.min.css><link rel=stylesheet href=/loveit/css/style.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.13.0/css/all.min.css><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/animate.css@3.7.2/animate.min.css><script type=application/ld+json>{"@context":"http://schema.org","@type":"BlogPosting","headline":"Linux 生成随机数","inLanguage":"zh-CN","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/ictw.github.io\/loveit\/post\/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0\/"},"image":["https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"],"genre":"posts","keywords":"Linux, 随机数, openssl","wordcount":965,"url":"https:\/\/ictw.github.io\/loveit\/post\/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0\/","datePublished":"2020-06-01T10:01:51+08:00","dateModified":"2020-06-01T10:01:51+08:00","license":"This work is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.","publisher":{"@type":"Organization","name":"AGou-ops","logo":"https:\/\/agou-images.oss-cn-qingdao.aliyuncs.com\/BaseIMG\/tuoer.jpg"},"author":{"@type":"Person","name":"AGou-ops"},"description":""}</script></head><body header-desktop=auto header-mobile=auto><script type=text/javascript>(window.localStorage&&localStorage.getItem('theme')?localStorage.getItem('theme')==='dark':('auto'==='auto'?window.matchMedia('(prefers-color-scheme: dark)').matches:'auto'==='dark'))&&document.body.setAttribute('theme','dark');</script><div id=mask></div><div class=wrapper><header class=desktop id=header-desktop><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu><div class=menu-inner><a class=menu-item href=/myBlog-2/posts/>所有文章 </a><a class=menu-item href=/myBlog-2/tags/>标签 </a><a class=menu-item href=/myBlog-2/categories/>分类 </a><a class=menu-item href=/myBlog-2/anime/>Anime </a><a class=menu-item href=/myBlog-2/about/>关于 </a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><span class="menu-item delimiter"></span><a href=javascript:void(0); class="menu-item language" title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select id=language-select-desktop onchange="location=this.value;"><option value=/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/ selected>简体中文</option></select>
+</a><span class="menu-item search" id=search-desktop><input type=text placeholder=搜索文章标题或内容... id=search-input-desktop>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-desktop title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-desktop title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-desktop><i class="fas fa-spinner fa-fw fa-spin"></i></span></span><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题><i class="fas fa-adjust fa-fw"></i></a></div></div></div></header><header class=mobile id=header-mobile><div class=header-container><div class=header-wrapper><div class=header-title><a href=/loveit/ title="AGou's Blog-2"><span class=header-title-pre><i class="far fa-kiss-wink-heart fa-fw"></i></span>AGou-ops</a></div><div class=menu-toggle id=menu-toggle-mobile><span></span><span></span><span></span></div></div><div class=menu id=menu-mobile><div class=search-wrapper><div class="search mobile" id=search-mobile><input type=text placeholder=搜索文章标题或内容... id=search-input-mobile>
+<a href=javascript:void(0); class="search-button search-toggle" id=search-toggle-mobile title=搜索><i class="fas fa-search fa-fw"></i></a><a href=javascript:void(0); class="search-button search-clear" id=search-clear-mobile title=清空><i class="fas fa-times-circle fa-fw"></i></a><span class="search-button search-loading" id=search-loading-mobile><i class="fas fa-spinner fa-fw fa-spin"></i></span></div><a href=javascript:void(0); class=search-cancel id=search-cancel-mobile>取消</a></div><a class=menu-item href=/myBlog-2/posts/>所有文章</a><a class=menu-item href=/myBlog-2/tags/>标签</a><a class=menu-item href=/myBlog-2/categories/>分类</a><a class=menu-item href=/myBlog-2/anime/>Anime</a><a class=menu-item href=/myBlog-2/about/>关于</a><a class=menu-item href=https://github.com/AGou-ops title=GitHub rel="noopener noreffer" target=_blank><i class="fab fa-github fa-fw"></i></a><a href=javascript:void(0); class="menu-item theme-switch" title=切换主题>
+<i class="fas fa-adjust fa-fw"></i></a><a href=javascript:void(0); class=menu-item title=选择语言>简体中文<i class="fas fa-chevron-right fa-fw"></i>
+<select class=language-select onchange="location=this.value;"><option value=/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/ selected>简体中文</option></select></a></div></div></header><div class="search-dropdown desktop"><div id=search-dropdown-desktop></div></div><div class="search-dropdown mobile"><div id=search-dropdown-mobile></div></div><main class=main><div class=container><div class=toc id=toc-auto><h2 class=toc-title>目录</h2><div class=toc-content id=toc-content-auto></div></div><article class="page single"><h1 class="single-title animated flipInX">Linux 生成随机数</h1><div class=post-meta><div class=post-meta-line><span class=post-author><a href=/loveit/ title=Author rel=author class=author><i class="fas fa-user-circle fa-fw"></i>AGou-ops</a></span>&nbsp;<span class=post-category>收录于 <a href=/loveit/categories/linux/><i class="far fa-folder fa-fw"></i>Linux</a></span></div><div class=post-meta-line><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime=2020-06-01>2020-06-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 965 字&nbsp;
+<i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div></div><div class="details toc" id=toc-static kept><div class="details-summary toc-title"><span>目录</span>
+<span><i class="details-icon fas fa-angle-right"></i></span></div><div class="details-content toc-content" id=toc-content-static><nav id=TableOfContents><ul><li><a href=#通过-openssl-生成>通过 openssl 生成</a></li><li><a href=#使用-date-命令生成>使用 date 命令生成</a></li><li><a href=#使用-md5sum-生成随机数>使用 md5sum 生成随机数</a></li><li><a href=#使用-dd-命令生成随机数>使用 dd 命令生成随机数</a></li><li><a href=#通过devrandom设备产生uuid>通过/dev/random设备产生uuid</a></li><li><a href=#使用系统环境变量-random>使用系统环境变量 RANDOM</a></li><li><a href=#使用第三方工具>使用第三方工具</a></li><li><a href=#参考链接>参考链接</a></li></ul></nav></div></div><div class=content id=content><p>[TOC]</p><h2 id=通过-openssl-生成>通过 openssl 生成</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> openssl rand -base64 <span class=m>3</span>
+xsSp
+
+<span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> openssl rand -base64 <span class=m>8</span>
+<span class=nv>8SlHCsBAiYw</span><span class=o>=</span>
+
+<span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> openssl rand -base64 <span class=m>10</span>
+<span class=nv>nUzBw8ngKGGqWw</span><span class=o>==</span>
+
+<span class=sb>`</span>openssl rand -base64 32<span class=p>|</span>tr A-Z a-z<span class=p>|</span>cut -c 1-10<span class=sb>`</span>
+</code></pre></td></tr></table></div></div><h2 id=使用-date-命令生成>使用 date 命令生成</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> date +%s
+<span class=m>1539071518</span>
+
+<span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> date +%N
+<span class=m>801398716</span>
+
+<span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> date +%s%N
+<span class=m>1539071555311467855</span>
+
+<span class=sb>`</span>date +%s <span class=p>|</span>sha256sum <span class=p>|</span>base64 <span class=p>|</span>head -c <span class=m>10</span> <span class=p>;</span><span class=nb>echo</span><span class=sb>`</span>
+</code></pre></td></tr></table></div></div><h2 id=使用-md5sum-生成随机数>使用 md5sum 生成随机数</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>date <span class=p>|</span> md5sum
+</code></pre></td></tr></table></div></div><h2 id=使用-dd-命令生成随机数>使用 dd 命令生成随机数</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>dd <span class=k>if</span><span class=o>=</span>/dev/urandom <span class=nv>bs</span><span class=o>=</span><span class=m>1</span> <span class=nv>count</span><span class=o>=</span>15<span class=p>|</span>base64 -w <span class=m>0</span>
+</code></pre></td></tr></table></div></div><h2 id=通过devrandom设备产生uuid>通过/dev/random设备产生uuid</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> cat /proc/sys/kernel/random/uuid
+a3dfb0f2-f893-4e57-9d67-184a88d4cb5d
+
+<span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> cat /proc/sys/kernel/random/uuid <span class=p>|</span>cut -c 1-8
+b80c60d8
+</code></pre></td></tr></table></div></div><h2 id=使用系统环境变量-random>使用系统环境变量 RANDOM</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> <span class=nb>echo</span> <span class=nv>$RANDOM</span>
+<span class=m>14535</span>
+
+<span class=c1>##说明：linux系统下的环境变量$RANDOM的取值范围是：0–32767 。</span>
+</code></pre></td></tr></table></div></div><ol><li>产生0-25范围内的数，用这个环境变量对26取余即可。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> <span class=nb>echo</span> <span class=k>$((</span><span class=nv>$RANDOM</span><span class=o>%</span><span class=m>26</span><span class=k>))</span>
+<span class=m>6</span>
+
+<span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> <span class=nb>echo</span> <span class=k>$((</span>RANDOM%26<span class=k>))</span>
+<span class=m>11</span>
+
+<span class=c1>##说明：第二个表达式RANDOM前面无$符号好像也可以。</span>
+</code></pre></td></tr></table></div></div><ol start=2><li>产生6位数的整数，用这个环境变量加上100000即可。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> <span class=nb>echo</span> <span class=k>$((</span><span class=nv>$RANDOM</span><span class=o>+</span><span class=m>100000</span><span class=k>))</span>
+<span class=m>117482</span>
+
+<span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> <span class=nb>echo</span> <span class=k>$((</span>RANDOM+100000<span class=k>))</span>
+<span class=m>126058</span>
+
+<span class=c1>##说明：第二个表达式RANDOM前面无$符号好像也可以。</span>
+</code></pre></td></tr></table></div></div><ol start=3><li>产生加密的随机数码，将随机数管道给命令md5sum命令即可。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> <span class=nb>echo</span> <span class=nv>$RANDOM</span> <span class=p>|</span>md5sum
+6ee8cd13547eb044ad13ba014573af6f  -
+</code></pre></td></tr></table></div></div><ol start=4><li>需要固定位数的随机数码，将随机数管道给命令md5sum命令再管道给cut命令即可。</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash><span class=o>[</span>root@myhost ~<span class=o>]</span><span class=se>\#</span> <span class=nb>echo</span> <span class=nv>$RANDOM</span> <span class=p>|</span>md5sum<span class=p>|</span>cut -c 1-8
+de3cfe23
+</code></pre></td></tr></table></div></div><h2 id=使用第三方工具>使用第三方工具</h2><ol><li>expect 非交互式程序控制下用<code>mkpasswd</code>命令：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>yum install -y expect
+
+mkpasswd   -l 7		<span class=c1># 生成七位密码包含大小写加特殊字符</span>
+</code></pre></td></tr></table></div></div><ol start=2><li>使用<code>pwgen</code>生成随机可读的密码：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-bash data-lang=bash>yum install pwgen
+
+<span class=c1># 生成长度8，含有数字，含有大小写字母的密码4个，列打印</span>
+pwgen -ncC <span class=m>8</span> <span class=m>4</span>
+<span class=c1># 生成长度8，含有数字，含有小写字母，不包含歧义的密码4个，列打印</span>
+pwgen -nABC <span class=m>8</span> <span class=m>4</span>
+
+<span class=c1># 生成长度16，含有数字，含有大小写字母，含有特殊字符的密码8个，行打印</span>
+pwgen -ncy1 <span class=m>16</span> <span class=m>8</span>
+</code></pre></td></tr></table></div></div><p>参数说明：</p><ul><li><code>-c or –capitalize</code>密码中至少包含一个大写字母</li><li><code>-A or –no-capitalize</code>密码中不包含大写字母</li><li><code>-n or –numerals</code>密码中至少包含一个数字</li><li><code>-0 or –no-numerals</code>密码中不包含数字</li><li><code>-y or –symbols</code>密码中至少包含一个特殊符号</li><li><code>-s or –secure</code>生成完全随机密码</li><li><code>-B or –ambiguous</code>密码中不包含歧义字符（例如1,l,O,0）</li><li><code>-H or –sha1=path/to/file[#seed]</code>使用SHA1 hash给定的文件作为一个随机种子</li><li><code>-C</code>在列中打印生成的密码</li><li><code>-1</code>不要在列中打印生成的密码，即一行一个密码</li><li><code>-v or –no-vowels</code>不要使用任何元音，以避免偶然的脏话</li></ul><ol start=3><li>其他第三方工具：</li></ol><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre class=chroma><code class=language-fallback data-lang=fallback>randpw、spw、gpg、xkcdpass
+</code></pre></td></tr></table></div></div><h2 id=参考链接>参考链接</h2><ul><li><a href=https://blog.csdn.net/yuki5233/article/details/82997001>https://blog.csdn.net/yuki5233/article/details/82997001</a></li></ul></div><div class=post-footer id=post-footer><div class=post-info><div class=post-info-line><div class=post-info-mod><span>更新于 2020-06-01</span></div><div class=post-info-license></div></div><div class=post-info-line><div class=post-info-md><span><a class=link-to-markdown href=/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/index.md target=_blank>阅读原始文档</a></span></div><div class=post-info-share><span><a href=javascript:void(0); title="分享到 Twitter" data-sharer=twitter data-url=https://ictw.github.io/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/ data-title="Linux 生成随机数" data-hashtags=Linux,随机数,openssl><i class="fab fa-twitter fa-fw"></i></a><a href=javascript:void(0); title="分享到 Facebook" data-sharer=facebook data-url=https://ictw.github.io/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/ data-hashtag=Linux><i class="fab fa-facebook-square fa-fw"></i></a><a href=javascript:void(0); title="分享到 Hacker News" data-sharer=hackernews data-url=https://ictw.github.io/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/ data-title="Linux 生成随机数"><i class="fab fa-hacker-news fa-fw"></i></a><a href=javascript:void(0); title="分享到 Line" data-sharer=line data-url=https://ictw.github.io/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/ data-title="Linux 生成随机数"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/line.svg></i></a><a href=javascript:void(0); title="分享到 微博" data-sharer=weibo data-url=https://ictw.github.io/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/ data-title="Linux 生成随机数" data-ralateuid=AGou-ops><i class="fab fa-weibo fa-fw"></i></a><a href=javascript:void(0); title="分享到 百度" data-sharer=baidu data-url=https://ictw.github.io/loveit/post/linux%E7%94%9F%E6%88%90%E9%9A%8F%E6%9C%BA%E6%95%B0/ data-title="Linux 生成随机数"><i data-svg-src=https://cdn.jsdelivr.net/npm/simple-icons@2.14.0/icons/baidu.svg></i></a></span></div></div></div><div class=post-info-more><section class=post-tags><i class="fas fa-tags fa-fw"></i>&nbsp;<a href=/loveit/tags/linux/>Linux</a>,&nbsp;<a href=/loveit/tags/%E9%9A%8F%E6%9C%BA%E6%95%B0/>随机数</a>,&nbsp;<a href=/loveit/tags/openssl/>openssl</a></section><section><span><a href=javascript:void(0); onclick=window.history.back();>返回</a></span>&nbsp;|&nbsp;<span><a href=/loveit/>主页</a></span></section></div><div class=post-nav><a href=/loveit/post/scrcpy-android%E6%8A%95%E5%B1%8F%E7%A5%9E%E5%99%A8/ class=prev rel=prev title="Scrcpy Android投屏神器"><i class="fas fa-angle-left fa-fw"></i>Scrcpy Android投屏神器</a>
+<a href=/loveit/post/linux-%E7%B3%BB%E7%BB%9F%E8%B5%84%E6%BA%90%E7%9B%91%E6%8E%A7%E9%9D%A2%E6%9D%BF/ class=next rel=next title="Linux 系统资源监控面板">Linux 系统资源监控面板<i class="fas fa-angle-right fa-fw"></i></a></div></div></article></div></main><footer class=footer><div class=footer-container><div class=footer-line><a href=https://agou-ops.github.io/-/ target=_blank rel="noopener noreferrer" style=color:red>【AGou-ops.cn】</a> 备份站点</div><div class=footer-line>由 <a href=https://gohugo.io/ target=_blank rel="noopener noreffer" title="Hugo 0.75.1">Hugo</a> 强力驱动 | 主题 - <a href=https://github.com/dillonzq/LoveIt target=_blank rel="noopener noreffer" title="LoveIt 0.2.10"><i class="far fa-kiss-wink-heart fa-fw"></i>LoveIt</a></div><div class=footer-line><i class="far fa-copyright fa-fw"></i><span itemprop=copyrightYear>2018 - 2022</span><span class=author itemprop=copyrightHolder>&nbsp;<a href=/loveit/ target=_blank>AGou-ops</a></span>&nbsp;|&nbsp;<span class=license><a rel="license external nofollow noopener noreffer" href=https://creativecommons.org/licenses/by-nc/4.0/ target=_blank>CC BY-NC 4.0</a></span><span class=icp-splitter>&nbsp;|&nbsp;</span><br class=icp-br><span class=icp>鲁ICP备19050296号-2</span></div></div></footer></div><div id=fixed-buttons><a href=# id=back-to-top class=fixed-button title=回到顶部><i class="fas fa-arrow-up fa-fw"></i></a><a href=# id=view-comments class=fixed-button title=查看评论><i class="fas fa-comment fa-fw"></i></a></div><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/css/lightgallery.min.css><script type=text/javascript src=https://cdn.jsdelivr.net/npm/smooth-scroll@16.1.3/dist/smooth-scroll.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/autocomplete.js@0.37.1/dist/autocomplete.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/algoliasearch@4.2.0/dist/algoliasearch-lite.umd.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lazysizes@5.2.2/lazysizes.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/twemoji@13.0.0/dist/twemoji.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lightgallery.js@1.2.0/dist/js/lightgallery.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-thumbnail.js@1.2.0/dist/lg-thumbnail.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/lg-zoom.js@1.2.0/dist/lg-zoom.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js></script><script type=text/javascript src=https://cdn.jsdelivr.net/npm/sharer.js@0.4.0/sharer.min.js></script><script type=text/javascript>window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":10},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"5M8VQRD7W9","algoliaIndex":"blog-2","algoliaSearchKey":"2fcdbd0ce638664e7a28cc64939603b9","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"},"twemoji":true};</script><script type=text/javascript src=/loveit/js/theme.min.js></script></body></html>
