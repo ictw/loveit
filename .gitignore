@@ -2,4 +2,3 @@
 /public/*
 /resources/*
 .env
-config.*
